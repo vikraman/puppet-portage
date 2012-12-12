@@ -16,7 +16,7 @@ Puppet::Type.newtype(:package_keywords) do
 
     validate do |value|
       unless Puppet::Util::Portage.valid_atom? value
-        raise Puppet::Error, "name must be a properly formatted atom, see man portage(5) for more information"
+        raise ArgumentError, "name must be a properly formatted atom, see man portage(5) for more information"
       end
     end
   end
@@ -25,7 +25,7 @@ Puppet::Type.newtype(:package_keywords) do
     desc "The keywords(s) to use"
 
     validate do |value|
-      raise Puppet::Error, "Keyword cannot contain whitespace" if value =~ /\s/
+      raise ArgumentError, "Keyword cannot contain whitespace" if value =~ /\s/
     end
 
     def insync?(is)

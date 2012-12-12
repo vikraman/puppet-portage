@@ -16,7 +16,7 @@ Puppet::Type.newtype(:package_mask) do
     validate do |value|
 
       unless Puppet::Util::Portage.valid_atom? value
-        raise Puppet::Error, "name must be a properly formatted atom, see portage(5) for more information"
+        raise ArgumentError, "name must be a properly formatted atom, see portage(5) for more information"
       end
     end
   end
