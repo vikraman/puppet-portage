@@ -1,6 +1,8 @@
 #!/usr/bin/env rspec
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "spec_helper"))
 
+require 'puppet/util/portage'
+
 describe Puppet::Util::Portage do
   describe ".valid_atom?" do
 
