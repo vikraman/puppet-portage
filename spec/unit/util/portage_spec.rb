@@ -4,7 +4,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "spec_hel
 require 'puppet/util/portage'
 
 describe Puppet::Util::Portage do
-  describe ".valid_atom?" do
+  describe "valid_atom?" do
 
     valid_atoms   = %w{=sys-devel/gcc-4.3.2-r4 >=app-crypt/gnupg-1.9 net-analyzer/nagios-nrpe}
     invalid_atoms = %w{sys-devel-gcc =sys-devel/gcc}
@@ -22,7 +22,7 @@ describe Puppet::Util::Portage do
     end
   end
 
-  describe ".valid_package?" do
+  describe "valid_package?" do
     valid_packages = [
       'app-accessibility/brltty',
       'dev-libs/userspace-rcu',
@@ -86,6 +86,83 @@ describe Puppet::Util::Portage do
     invalid_versions.each do |ver|
       it "should reject #{ver} as invalid" do
         Puppet::Util::Portage.valid_version?(ver).should be_false
+      end
+    end
+  end
+
+  describe "parse_atom" do
+
+    valid_base_atoms = [
+      'app-accessibility/brltty',
+      'dev-libs/userspace-rcu',
+      'sys-dev/gcc',
+    ]
+
+    valid_base_atoms.each do |atom|
+      it "should parse #{atom} as {:package => #{atom}}" do
+        Puppet::Util::Portage.parse_atom(atom).should == {:package => atom}
+      end
+    end
+
+    valid_atoms = [
+      {
+        :atom => 'dev-libs/glib-2.32.4-r1',
+        :expected => {
+          :package => 'dev-libs/glib',
+          :version => '2.32.4-r1',
+          :compare => '=',
+        },
+      },
+      {
+        :atom => '>=app-admin/puppet-3.0.1',
+        :expected => {
+          :package => 'app-admin/puppet',
+          :version => '3.0.1',
+          :compare => '>=',
+        }
+      },
+      {
+        :atom => 'app-misc/dummy-3',
+        :expected => {
+          :package => 'app-misc/dummy',
+          :version => '3',
+          :compare => '=',
+        }
+      },
+      {
+        :atom => '~sys-apps/net-tools-1.60_p20120127084908',
+        :expected => {
+          :package => 'sys-apps/net-tools',
+          :version => '1.60_p20120127084908',
+          :compare => '~',
+        }
+      },
+      {
+        :atom => '<sys-devel/libtool-2.4-r1',
+        :expected => {
+          :package => 'sys-devel/libtool',
+          :version => '2.4-r1',
+          :compare => '<',
+        }
+      },
+    ]
+
+    invalid_atoms = [
+      'app-accessibility/brltty-',
+      'gcc',
+      'sys-dev-gcc',
+      '=app-admin/eselect-fontconfig',
+      '1sys-devel/libtool',
+      '!app-accessibility/brltty-4.3.2-r4',
+      '<dev-libs/userspace-rcu4.1.2',
+      '>=sys-dev/gcc-alpha4.5.1',
+    ]
+
+    invalid_atoms.each do |atom|
+      it "should raise an error when parsing #{atom}" do
+        expect {
+          Puppet::Util::Portage.parse_atom(atom)
+        }.to raise_error, Puppet::Util::Portage::AtomError
       end
     end
   end

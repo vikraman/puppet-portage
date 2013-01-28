@@ -3,6 +3,14 @@ module Puppet::Util::Portage
   #
   # @see http://dev.gentoo.org/~zmedico/portage/doc/man/ebuild.5.html 'man 5 ebuild section DEPEND'
 
+  PACKAGE_PATTERN = '([a-zA-Z-]+/[a-zA-Z-]+?[a-zA-Z])'
+  COMPARE_PATTERN = '([<>=~]|[<>]=)?'
+  VERSION_PATTERN = '([\d.]+[\w-]*)'
+
+  BASE_ATOM_REGEX      = Regexp.new "^#{PACKAGE_PATTERN}$"
+  VERSIONED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}?#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$"
+  DEPEND_ATOM_REGEX    = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX
+
   # Determine if a string is a valid DEPEND atom
   #
   # @param [String] atom The string to validate as a DEPEND atom
@@ -10,16 +18,8 @@ module Puppet::Util::Portage
   # @return [TrueClass]
   # @return [FalseClass]
   def self.valid_atom?(atom)
-    atom_prefix  = '(?:[<>=]|[<>]=)'
-    atom_name    = '(?:[a-zA-Z-]+/[a-zA-Z-]+?)'
-    atom_version = '(?:-[\d.]+[\w-]+)'
-
-    base_atom      = Regexp.new("^#{atom_name}$")
-    versioned_atom = Regexp.new("^#{atom_prefix}#{atom_name}#{atom_version}$")
-    depend         = Regexp.union(base_atom, versioned_atom)
-
     # Normalize the regular expression output to a boolean
-    !!(atom =~ depend)
+    !!(atom =~ DEPEND_ATOM_REGEX)
   end
 
   # Determine if a string is a valid package name
@@ -29,11 +29,7 @@ module Puppet::Util::Portage
   # @return [TrueClass]
   # @return [FalseClass]
   def self.valid_package?(package_name)
-    package_pattern  = '(?:[\w-]+/(:?[\w-]+\w)?)'
-
-    regex = Regexp.new(%[^#{package_pattern}$])
-
-    !!(package_name =~ regex)
+    !!(package_name =~ BASE_ATOM_REGEX)
   end
 
   # Determine if a string is a valid DEPEND atom version
@@ -46,12 +42,30 @@ module Puppet::Util::Portage
   # @return [TrueClass]
   # @Return [FalseClass]
   def self.valid_version?(version_str)
-
-    compare_pattern = '(?:[<>=~]|[<>]=)'
-    version_pattern = '(?:[\d.]+[\w-]+)'
-
-    regex = Regexp.new(%[^#{compare_pattern}?#{version_pattern}$])
-
+    regex = Regexp.new "^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$"
     !!(version_str =~ regex)
   end
+
+  # Parse a string into the different components of a DEPEND atom.
+  #
+  # If the atom is versioned, the returned value will contain the keys
+  # :package, :compare, and :version. If the atom is unversioned then it will
+  # contain the key :package.
+  #
+  # @raise [Puppet::Util::Portage::AtomError]
+  #
+  # @param [String] atom The string to parse
+  #
+  # @return [Hash<Symbol, String>] The parsed values
+  def self.parse_atom(atom)
+    if (match = atom.match(BASE_ATOM_REGEX))
+      {:package => match[1]}
+    elsif (match = atom.match(VERSIONED_ATOM_REGEX))
+      {:compare => (match[1] || '='), :package => match[2], :version => match[3]}
+    else
+      raise AtomError, "#{atom} is not a valid atom"
+    end
+  end
+
+  class AtomError < RuntimeError; end
 end
