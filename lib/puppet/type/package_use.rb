@@ -1,3 +1,4 @@
+require 'puppet/util/portage'
 Puppet::Type.newtype(:package_use) do
   @doc = "Set use flags for a package.
 

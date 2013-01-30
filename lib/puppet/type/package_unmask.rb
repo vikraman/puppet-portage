@@ -1,3 +1,4 @@
+require 'puppet/util/portage'
 Puppet::Type.newtype(:package_unmask) do
   @doc = "Unmask packages in portage.
   

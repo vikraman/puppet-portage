@@ -1,3 +1,4 @@
+require 'puppet/util/portage'
 Puppet::Type.newtype(:package_mask) do
   @doc = "Mask packages in portage.
   
