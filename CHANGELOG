@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+1.0.1
+-----
+
+2013-01-30
+
+This is a backwards compatible bugfix release.
+
+  * (portage-#21) Add portage util require for all package_* types.
+
 1.0.0
 -----
 
