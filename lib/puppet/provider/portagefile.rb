@@ -15,14 +15,14 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
     super
   end
 
-  def self.build_line(hash, sym)
+  def self.build_line(hash, sym = nil)
     unless hash[:name] and hash[:name] != :absent
       raise ArgumentError, "name is a required attribute of portagefile providers"
     end
 
     str = Puppet::Util::Portage.format_atom(hash)
 
-    if hash.include? sym
+    if !sym.nil? and hash.include? sym
       if hash[sym].is_a? Array
         str << " " << hash[sym].join(" ")
       else

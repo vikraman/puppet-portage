@@ -27,4 +27,9 @@ Puppet::Type.type(:package_mask).provide(:parsed,
 
     hash
   end
+
+  def self.to_line(hash)
+    return super unless hash[:record_type] == :parsed
+    build_line(hash)
+  end
 end
