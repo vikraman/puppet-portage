@@ -6,7 +6,7 @@ module Puppet::Util::Portage
   extend self
 
   PACKAGE_PATTERN = '([a-zA-Z-]+/[a-zA-Z-]+?[a-zA-Z])'
-  COMPARE_PATTERN = '([<>=~]|[<>]=)?'
+  COMPARE_PATTERN = '([<>=~]|[<>]=)'
   VERSION_PATTERN = '([\d.]+[\w-]*)'
 
   BASE_ATOM_REGEX      = Regexp.new "^#{PACKAGE_PATTERN}$"
