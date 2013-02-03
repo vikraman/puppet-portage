@@ -31,7 +31,15 @@ Puppet::Type.type(:package_use).provide(:parsed,
 
     elsif (match = line.match /^(\S+)\s*/)
       # just a package
-      hash[:name] = match[1]
+      components = Puppet::Util::Portage.parse_atom(match[1])
+
+      # Try to parse version string
+      if components[:compare] and components[:version]
+        v = components[:compare] + components[:version]
+      end
+
+      hash[:name]    = components[:package]
+      hash[:version] = v
     else
       raise Puppet::Error, "Could not match '#{line}'"
     end
