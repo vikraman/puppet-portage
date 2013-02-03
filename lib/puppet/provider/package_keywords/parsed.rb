@@ -1,4 +1,5 @@
 require 'puppet/provider/portagefile'
+require 'puppet/util/portage'
 
 Puppet::Type.type(:package_keywords).provide(:parsed,
   :parent => Puppet::Provider::PortageFile,
@@ -13,9 +14,17 @@ Puppet::Type.type(:package_keywords).provide(:parsed,
     :rts  => true do |line|
     hash = {}
     # if we have a package and a keyword
-    if line =~ /^(\S+)\s+(.*)\s*$/
-      hash[:name] = $1
-      keywords = $2
+    if (match = line.match /^(\S+)\s+(.*)\s*$/)
+      components = Puppet::Util::Portage.parse_atom(match[1])
+
+      # Try to parse version string
+      if components[:version] and components[:compare]
+        v = components[:compare] + components[:version]
+      end
+
+      hash[:name]    = components[:package]
+      keywords       = match[2]
+      hash[:version] = v
 
       if keywords
         hash[:keywords] = keywords.split(/\s+/)

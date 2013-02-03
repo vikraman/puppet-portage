@@ -1,5 +1,5 @@
-require 'puppet/util/portage'
 require 'puppet/provider/portagefile'
+require 'puppet/util/portage'
 
 Puppet::Type.type(:package_use).provide(:parsed,
   :parent => Puppet::Provider::PortageFile,
@@ -13,9 +13,17 @@ Puppet::Type.type(:package_use).provide(:parsed,
     :joiner => ' ',
     :rts  => true do |line|
     hash = {}
-    if line =~ /^(\S+)\s+(.*)\s*$/
-      hash[:name] = $1
-      use = $2
+    if (match = line.match /^(\S+)\s+(.*)\s*$/)
+      components = Puppet::Util::Portage.parse_atom(match[1])
+
+      # Try to parse version string
+      if components[:version] and components[:compare]
+        v = components[:compare] + components[:version]
+      end
+
+      hash[:name]    = components[:package]
+      use            = match[2]
+      hash[:version] = v
 
       unless use == ""
         hash[:use] = use.split(/\s+/)
