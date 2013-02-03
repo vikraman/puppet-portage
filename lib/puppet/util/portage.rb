@@ -87,10 +87,14 @@ module Puppet::Util::Portage
   def format_atom(hash)
     str = ""
 
-    ver_hash = parse_cmpver(hash[:version]) if hash[:version]
-    str << ver_hash[:compare] if ver_hash[:compare]
-    str << hash[:name]
-    str << ver_hash[:verison] if ver_hash[:compare]
+    if hash[:version]
+      ver_hash = parse_cmpver(hash[:version])
+      str << ver_hash[:compare]
+      str << hash[:name]
+      str << ver_hash[:verison]
+    else
+      str = hash[:name]
+    end
 
     str
   end
