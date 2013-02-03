@@ -13,31 +13,29 @@ Puppet::Type.type(:package_keywords).provide(:parsed,
     :joiner => ' ',
     :rts  => true do |line|
     hash = {}
-    # if we have a package and a keyword
     if (match = line.match /^(\S+)\s+(.*)\s*$/)
+      # if we have a package and a keyword
+
       components = Puppet::Util::Portage.parse_atom(match[1])
 
       # Try to parse version string
-      if components[:version] and components[:compare]
+      if components[:compare] and components[:version]
         v = components[:compare] + components[:version]
       end
 
       hash[:name]    = components[:package]
-      keywords       = match[2]
       hash[:version] = v
+      keywords       = match[2]
 
       if keywords
         hash[:keywords] = keywords.split(/\s+/)
       end
-    # just a package
-    elsif line =~ /^(\S+)\s*$/
-      hash[:name] = $1
+
+    elsif (match = line.match /^(\S+)\s*/)
+      # just a package
+      hash[:name] = match[1]
     else
       raise Puppet::Error, "Could not match '#{line}'"
-    end
-
-    if hash[:keywords] == ""
-      hash.delete(:keywords)
     end
 
     hash

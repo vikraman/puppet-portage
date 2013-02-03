@@ -17,26 +17,23 @@ Puppet::Type.type(:package_use).provide(:parsed,
       components = Puppet::Util::Portage.parse_atom(match[1])
 
       # Try to parse version string
-      if components[:version] and components[:compare]
+      if components[:compare] and components[:version]
         v = components[:compare] + components[:version]
       end
 
       hash[:name]    = components[:package]
-      use            = match[2]
       hash[:version] = v
+      use            = match[2]
 
-      unless use == ""
+      if use
         hash[:use] = use.split(/\s+/)
       end
-    # just a package
-    elsif line =~ /^(\S+)\s*/
-      hash[:name] = $1
-    else
-      raise Puppet::Error, "Could not match '%s'" % line
-    end
 
-    if hash[:use] == ""
-      hash.delete(:use)
+    elsif (match = line.match /^(\S+)\s*/)
+      # just a package
+      hash[:name] = match[1]
+    else
+      raise Puppet::Error, "Could not match '#{line}'"
     end
 
     hash
