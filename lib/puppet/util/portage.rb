@@ -69,5 +69,31 @@ module Puppet::Util::Portage
     end
   end
 
+  # Parse out a combined compare and version into a hash
+  #
+  # @return [Hash]
+  def parse_cmpver(cmpver)
+    regex = Regexp.new("#{COMPARE_PATTERN}?#{VERSION_PATTERN}")
+    if (match = cmpver.match regex)
+      {:compare => match[1], :version => match[2]}
+    else
+      raise AtomError, "#{cmpver} is not a valid compare version"
+    end
+  end
+
+  # Convert a hash describing an atom into a string
+  #
+  # @return [String]
+  def format_atom(hash)
+    str = ""
+
+    ver_hash = parse_cmpver(hash[:version]) if hash[:version]
+    str << ver_hash[:compare] if ver_hash[:compare]
+    str << hash[:name]
+    str << ver_hash[:verison] if ver_hash[:compare]
+
+    str
+  end
+
   class AtomError < RuntimeError; end
 end
