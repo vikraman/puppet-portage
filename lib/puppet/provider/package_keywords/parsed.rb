@@ -9,46 +9,15 @@ Puppet::Type.type(:package_keywords).provide(:parsed,
 
   desc "The package_keywords provider that uses the ParsedFile class"
 
-  record_line :parsed, :fields => %w{name keywords},
-    :joiner => ' ',
-    :rts  => true do |line|
-    hash = {}
-    if (match = line.match /^(\S+)\s+(.*)\s*$/)
-      # if we have a package and a keyword
-
-      components = Puppet::Util::Portage.parse_atom(match[1])
-
-      # Try to parse version string
-      if components[:compare] and components[:version]
-        v = components[:compare] + components[:version]
-      end
-
-      hash[:name]    = components[:package]
-      hash[:version] = v
-      keywords       = match[2]
-
-      if keywords
-        hash[:keywords] = keywords.split(/\s+/)
-      end
-
-    elsif (match = line.match /^(\S+)\s*/)
-      # just a package
-      components = Puppet::Util::Portage.parse_atom(match[1])
-
-      # Try to parse version string
-      if components[:compare] and components[:version]
-        v = components[:compare] + components[:version]
-      end
-
-      hash[:name]    = components[:package]
-      hash[:version] = v
-    else
-      raise Puppet::Error, "Could not match '#{line}'"
-    end
-
-    hash
+  record_line :parsed, :fields => %w{name keywords}, :joiner => ' ', :rts => true do |line|
+    Puppet::Provider::PortageFile.process_line(line, :keywords)
   end
 
+  # Define the ParsedFile format hook
+  #
+  # @param [Hash] hash
+  #
+  # @return [String]
   def self.to_line(hash)
     return super unless hash[:record_type] == :parsed
     build_line(hash, :keywords)

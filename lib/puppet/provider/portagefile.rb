@@ -31,4 +31,59 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
     end
     str
   end
+
+  # Define the :process FileRecord hook
+  #
+  # @param [String] line
+  # @param [Symbol] attribute
+  #
+  # @return [Hash]
+  def self.process_line(line, attribute = nil)
+    hash = {}
+
+    if !attribute.nil? and (match = line.match /^(\S+)\s+(.*)\s*$/)
+      # if we have a package and an array of attributes.
+
+      components = Puppet::Util::Portage.parse_atom(match[1])
+
+      # Try to parse version string
+      if components[:compare] and components[:version]
+        v = components[:compare] + components[:version]
+      end
+
+      hash[:name]    = components[:package]
+      hash[:version] = v
+
+      attr_array = match[2].split(/\s+/)
+      unless attr_array.empty?
+        hash[attribute] = attr_array
+      end
+
+    elsif (match = line.match /^(\S+)\s*/)
+      # just a package
+      components = Puppet::Util::Portage.parse_atom(match[1])
+
+      # Try to parse version string
+      if components[:compare] and components[:version]
+        v = components[:compare] + components[:version]
+      end
+
+      hash[:name]    = components[:package]
+      hash[:version] = v
+    else
+      raise Puppet::Error, "Could not match '#{line}'"
+    end
+
+    hash
+  end
+
+  # Define the ParsedFile format hook
+  #
+  # @param [Hash] hash
+  #
+  # @return [String]
+  def self.to_line(hash)
+    return super unless hash[:record_type] == :parsed
+    build_line(hash)
+  end
 end
