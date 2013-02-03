@@ -3,6 +3,8 @@ module Puppet::Util::Portage
   #
   # @see http://dev.gentoo.org/~zmedico/portage/doc/man/ebuild.5.html 'man 5 ebuild section DEPEND'
 
+  extend self
+
   PACKAGE_PATTERN = '([a-zA-Z-]+/[a-zA-Z-]+?[a-zA-Z])'
   COMPARE_PATTERN = '([<>=~]|[<>]=)?'
   VERSION_PATTERN = '([\d.]+[\w-]*)'
@@ -17,7 +19,7 @@ module Puppet::Util::Portage
   #
   # @return [TrueClass]
   # @return [FalseClass]
-  def self.valid_atom?(atom)
+  def valid_atom?(atom)
     # Normalize the regular expression output to a boolean
     !!(atom =~ DEPEND_ATOM_REGEX)
   end
@@ -28,7 +30,7 @@ module Puppet::Util::Portage
   #
   # @return [TrueClass]
   # @return [FalseClass]
-  def self.valid_package?(package_name)
+  def valid_package?(package_name)
     !!(package_name =~ BASE_ATOM_REGEX)
   end
 
@@ -41,7 +43,7 @@ module Puppet::Util::Portage
   #
   # @return [TrueClass]
   # @Return [FalseClass]
-  def self.valid_version?(version_str)
+  def valid_version?(version_str)
     regex = Regexp.new "^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$"
     !!(version_str =~ regex)
   end
@@ -57,7 +59,7 @@ module Puppet::Util::Portage
   # @param [String] atom The string to parse
   #
   # @return [Hash<Symbol, String>] The parsed values
-  def self.parse_atom(atom)
+  def parse_atom(atom)
     if (match = atom.match(BASE_ATOM_REGEX))
       {:package => match[1]}
     elsif (match = atom.match(VERSIONED_ATOM_REGEX))
