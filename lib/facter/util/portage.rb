@@ -6,7 +6,7 @@ module Facter::Util::Portage
   def emerge_info
     output = Facter::Util::Resolution.exec('emerge --info')
 
-    values = output.scan(/[A-Z_]+=".+?"/)
+    values = output.scan(/[0-9A-Z_]+=".+?"/)
 
     hash = values.inject({}) do |hash, string|
       match = string.match(/(.*)="(.*)"/)
