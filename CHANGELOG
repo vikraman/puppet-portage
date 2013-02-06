@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+1.1.0
+-----
+
+This is a backwards compatible bugfix and feature release.
+
+  * (maint) File permissions fixed for group and other read access
+  * (portage-#9) Add variables from `emerge --info` as facts
+  * (portage-#23) Deduplicate rebuild exec in portage::package
+
 1.0.1
 -----
 
