@@ -91,7 +91,7 @@ module Puppet::Util::Portage
       ver_hash = parse_cmpver(hash[:version])
       str << ver_hash[:compare]
       str << hash[:name]
-      str << ver_hash[:verison]
+      str << ver_hash[:version]
     else
       str = hash[:name]
     end
