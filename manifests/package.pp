@@ -97,33 +97,38 @@ define portage::package (
     package_keywords { $name:
       keywords => $keywords,
       target   => $assigned_keywords_target,
-      before   => Package[$name],
+      notify   => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
+
   if $unmask {
     package_unmask { $name:
       target => $assigned_unmask_target,
-      before => Package[$name],
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
+
   if $mask {
     package_mask { $name:
       target => $assigned_mask_target,
-      before => Package[$name],
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
+
   if $use {
     package_use { $name:
       use    => $use,
       target => $assigned_use_target,
-      before => Package[$name],
-      notify => Exec[ "changed_package_use-${name}"],
-    }
-    exec { "changed_package_use-${name}":
-      command     => "/usr/bin/emerge --reinstall=changed-use ${name}",
-      refreshonly => true,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
+
+  exec { "rebuild_${name}":
+    command     => "/usr/bin/emerge --changed-use -u1 ${name}",
+    refreshonly => true,
+    timeout     => 43200,
+  }
+
   package { $name:
     ensure => $ensure,
   }
