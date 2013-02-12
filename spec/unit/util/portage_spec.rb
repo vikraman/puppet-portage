@@ -145,6 +145,14 @@ describe Puppet::Util::Portage do
           :compare => '<',
         }
       },
+      {
+        :atom => '>=x11-proto/xproto-7.0.23',
+        :expected => {
+          :package => 'x11-proto/xproto',
+          :version => '7.0.23-r1',
+          :compare => '>=',
+        }
+      },
     ]
 
     invalid_atoms = [
@@ -152,7 +160,6 @@ describe Puppet::Util::Portage do
       'gcc',
       'sys-dev-gcc',
       '=app-admin/eselect-fontconfig',
-      '1sys-devel/libtool',
       '!app-accessibility/brltty-4.3.2-r4',
       '<dev-libs/userspace-rcu4.1.2',
       '>=sys-dev/gcc-alpha4.5.1',

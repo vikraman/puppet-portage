@@ -5,7 +5,7 @@ module Puppet::Util::Portage
 
   extend self
 
-  PACKAGE_PATTERN = '([a-zA-Z-]+/[a-zA-Z-]+?[a-zA-Z])'
+  PACKAGE_PATTERN = '([a-zA-Z0-9-]+/[a-zA-Z-]+?[a-zA-Z])'
   COMPARE_PATTERN = '([<>=~]|[<>]=)'
   VERSION_PATTERN = '([\d.]+[\w-]*)'
 
