@@ -13,6 +13,7 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
       Dir.mkdir(dir)
     end
     super
+    File.chmod(0644, target)
   end
 
   def self.build_line(hash, sym = nil)
