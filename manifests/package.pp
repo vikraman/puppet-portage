@@ -112,7 +112,7 @@ define portage::package (
     $assigned_unmask_target = $target
   }
 
-  if $keywords {
+  if $keywords or $keywords_version {
     package_keywords { $name:
       keywords => $keywords,
       version  => $keywords_version,
