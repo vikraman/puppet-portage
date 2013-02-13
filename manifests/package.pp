@@ -36,6 +36,22 @@
 #
 # An optional custom target for package unmasks
 #
+# [*use_version*]
+#
+# An optional version specification for package use
+#
+# [*keywords_version*]
+#
+# An optional version specification for package keywords
+#
+# [*mask*]
+#
+# An optional version specification for package mask
+#
+# [*unmask*]
+#
+# An optional version specification for package unmask
+#
 # == Example
 #
 #     portage::package { 'app-admin/puppet':
@@ -43,6 +59,7 @@
 #       use      => ['augeas', '-rrdtool'],
 #       keywords => '~amd64',
 #       target   => 'puppet',
+#       mask     => '<=2.7.18',
 #     }
 #
 # == See Also
@@ -53,14 +70,18 @@
 #  * `puppet describe package_unmask`
 #
 define portage::package (
-    $ensure          = undef,
-    $use             = undef,
-    $keywords        = undef,
-    $target          = undef,
-    $use_target      = undef,
-    $keywords_target = undef,
-    $mask_target     = undef,
-    $unmask_target   = undef,
+    $ensure           = undef,
+    $use              = undef,
+    $use_version      = undef,
+    $keywords         = undef,
+    $keywords_version = undef,
+    $mask             = undef,
+    $unmask           = undef,
+    $target           = undef,
+    $use_target       = undef,
+    $keywords_target  = undef,
+    $mask_target      = undef,
+    $unmask_target    = undef,
 ) {
 
   if $use_target {
@@ -94,6 +115,7 @@ define portage::package (
   if $keywords {
     package_keywords { $name:
       keywords => $keywords,
+      version  => $keywords_version,
       target   => $assigned_keywords_target,
       notify   => [Exec["rebuild_${name}"], Package[$name]],
     }
@@ -101,23 +123,26 @@ define portage::package (
 
   if $unmask {
     package_unmask { $name:
-      target => $assigned_unmask_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      version => $unmask,
+      target  => $assigned_unmask_target,
+      notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
   if $mask {
     package_mask { $name:
-      target => $assigned_mask_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      version => $mask,
+      target  => $assigned_mask_target,
+      notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
   if $use {
     package_use { $name:
-      use    => $use,
-      target => $assigned_use_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      use     => $use,
+      version => $use_version,
+      target  => $assigned_use_target,
+      notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
