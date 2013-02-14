@@ -3,15 +3,11 @@ Puppet Gentoo Portage Module
 
 Provides Gentoo portage features for Puppet.
 
-Usage
------
+Travis Test status: [![Build
+Status](https://travis-ci.org/adrienthebo/puppet-portage.png?branch=master)](https://travis-ci.org/adrienthebo/puppet-portage)
 
-The package types and providers share a few common characteristics. For one,
-the namevar must be a valid portage DEPEND atom. A full description of this can
-be found in portage(5). In addition, all of the providers are based off of the 
-parsedfile provider, so they are ensurable. The target parameter has been
-altered such that if you do not give a fully qualified path, the target file
-will be put in the relevant /etc/portage/package.\* directory.
+Synopsis
+--------
 
 ### package\_use ###
 
