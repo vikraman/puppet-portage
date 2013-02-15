@@ -11,7 +11,7 @@ module Puppet::Util::Portage
   # @see http://www.linuxmanpages.com/man5/ebuild.5.php#lbAE 'man 5 ebuild section DEPEND'
   def self.valid_atom?(atom)
     atom_prefix  = '(?:[<>=]|[<>]=)'
-    atom_name    = '(?:[a-zA-Z-]+/[a-zA-Z-]+?)'
+    atom_name    = '(?:[a-zA-Z-]+/[a-zA-Z-][a-zA-Z0-9-]+?)'
     atom_version = '(?:-[\d.]+[\w-]+)'
 
     base_atom      = Regexp.new("^#{atom_name}$")
