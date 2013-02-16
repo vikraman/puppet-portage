@@ -52,9 +52,10 @@ See Also
 Contributors
 ============
 
-  * Lance Albertson (lance@osuosl.org)
-  * Russell Haering (russell\_h@osuosl.org)
-  * Adrien Thebo (adrien@puppetlabs.com)
-  * Theo Chatzimichos (tampakrap@gentoo.org)
+  * Lance Albertson (https://github.com/ramereth)
+  * Russell Haering (https://github.com/russellhaering)
+  * Adrien Thebo (https://github.com/adrienthebo)
+  * Theo Chatzimichos (https://github.com/tampakrap)
+  * John-John Tedro (https://github.com/udoprog)
 
 
