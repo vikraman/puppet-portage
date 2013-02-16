@@ -1,7 +1,7 @@
 require 'puppet/util/portage'
 Puppet::Type.newtype(:package_unmask) do
   @doc = "Unmask packages in portage.
-  
+
       package_unmask { 'app-admin/puppet-2.7.1':
         target  => 'puppet',
       }"
@@ -15,8 +15,18 @@ Puppet::Type.newtype(:package_unmask) do
 
     validate do |value|
 
-      unless Puppet::Util::Portage.valid_atom? value
-        raise Puppet::Error, "name must be a properly formatted atom, see portage(5) for more information"
+      unless Puppet::Util::Portage.valid_package? value
+        raise ArgumentError, "name must be a properly formatted atom, see portage(5) for more information"
+      end
+    end
+  end
+
+  newproperty(:version) do
+    desc "A properly formatted version string"
+
+    validate do |value|
+      unless Puppet::Util::Portage.valid_version? value
+        raise ArgumentError, "name must be a properly formatted version"
       end
     end
   end
