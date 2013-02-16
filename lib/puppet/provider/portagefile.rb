@@ -19,7 +19,7 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
       raise ArgumentError, "name is a required attribute of portagefile providers"
     end
 
-    str = hash[:name]
+    str = hash[:name].dup
 
     if hash.include? sym
       if hash[sym].is_a? Array
