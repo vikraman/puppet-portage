@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+1.1.1
+-----
+
+This is a backwards compatible bugfix release.
+
+  * (maint) Support for Travis-ci added
+  * (portage-#36) Permit numeric values in atom name and category
+  * (portage-#25) Fixed mangling and duplication of _use and _keywords flags
+
 1.1.0
 -----
 
