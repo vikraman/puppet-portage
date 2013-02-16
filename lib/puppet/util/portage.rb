@@ -94,7 +94,7 @@ module Puppet::Util::Portage
       str << '-'
       str << ver_hash[:version]
     else
-      str = hash[:name]
+      str = hash[:name].dup
     end
 
     str
