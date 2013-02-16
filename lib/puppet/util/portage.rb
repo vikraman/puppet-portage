@@ -1,4 +1,14 @@
 module Puppet::Util::Portage
+  class << self
+    atom_prefix = '([<>=]|[<>]=)'
+    atom_name = '([a-zA-Z0-9-]+/[a-zA-Z0-9_+-]+?)'
+    atom_version = '(-[\d.]+[\w-]+)'
+
+    base_atom = Regexp.new("^#{atom_name}$")
+    versioned_atom = Regexp.new("^#{atom_prefix}#{atom_name}#{atom_version}$")
+    @@depend = Regexp.union(base_atom, versioned_atom)
+  end
+
   # Util methods for Portage types and providers.
 
   # Determine if a string is a valid DEPEND atom
@@ -10,15 +20,7 @@ module Puppet::Util::Portage
   #
   # @see http://www.linuxmanpages.com/man5/ebuild.5.php#lbAE 'man 5 ebuild section DEPEND'
   def self.valid_atom?(atom)
-    atom_prefix  = '(?:[<>=]|[<>]=)'
-    atom_name    = '(?:[a-zA-Z-]+/[a-zA-Z-][a-zA-Z0-9-]+?)'
-    atom_version = '(?:-[\d.]+[\w-]+)'
-
-    base_atom      = Regexp.new("^#{atom_name}$")
-    versioned_atom = Regexp.new("^#{atom_prefix}#{atom_name}#{atom_version}$")
-    depend         = Regexp.union(base_atom, versioned_atom)
-
     # Normalize the regular expression output to a boolean
-    !!(atom =~ depend)
+    !!(atom =~ @@depend)
   end
 end
