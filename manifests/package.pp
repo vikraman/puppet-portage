@@ -120,7 +120,7 @@ define portage::package (
       $assigned_keywords = $keywords
     }
     package_keywords { $name:
-      keywords => $assinged_keywords,
+      keywords => $assigned_keywords,
       version  => $keywords_version,
       target   => $assigned_keywords_target,
       notify   => [Exec["rebuild_${name}"], Package[$name]],
