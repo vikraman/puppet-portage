@@ -25,6 +25,8 @@ eselect_modules.each do |eselect_module|
     end
   else
     output = %x{eselect --brief --no-color #{eselect_module} show}.strip.split(' ')[0]
-    facter_add("eselect_#{eselect_module}", output)
+    if not ['(none)', '(unset)'].include? output
+      facter_add("eselect_#{eselect_module}", output)
+    end
   end
 end
