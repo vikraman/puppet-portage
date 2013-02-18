@@ -113,8 +113,14 @@ define portage::package (
   }
 
   if $keywords or $keywords_version {
+    if $keywords == 'all' {
+      $assigned_keywords = undef
+    }
+    else {
+      $assigned_keywords = $keywords
+    }
     package_keywords { $name:
-      keywords => $keywords,
+      keywords => $assigned_keywords,
       version  => $keywords_version,
       target   => $assigned_keywords_target,
       notify   => [Exec["rebuild_${name}"], Package[$name]],
@@ -122,16 +128,28 @@ define portage::package (
   }
 
   if $unmask {
+    if $unmask == 'all' {
+      $assigned_unmask = undef
+    }
+    else {
+      $assigned_unmask = $unmask
+    }
     package_unmask { $name:
-      version => $unmask,
+      version => $assigned_unmask,
       target  => $assigned_unmask_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
   if $mask {
+    if $mask == 'all' {
+      $assigned_mask = undef
+    }
+    else {
+      $assigned_mask = $mask
+    }
     package_mask { $name:
-      version => $mask,
+      version => $assigned_mask,
       target  => $assigned_mask_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
