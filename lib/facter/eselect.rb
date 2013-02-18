@@ -1,16 +1,30 @@
-eselect_modules = %x(eselect modules list).split('  ').reject! { |c| c.empty? }
-eselect_modules = eselect_modules.delete_if { |c| c["\n"] }
+eselect_modules = %x(eselect modules list).split('  ').reject! { |c| c.empty? }.delete_if { |c| c["\n"] }
 eselect_modules_blacklist = [
   'help', 'usage', 'version', 'bashcomp', 'env', 'fontconfig', 'modules',
   'news', 'rc',
 ]
 eselect_modules = eselect_modules - eselect_modules_blacklist
+eselect_modules_multitarget = {
+  'php' => ['cli', 'apache2', 'fpm', 'cgi'],
+}
 
-eselect_modules.each do |eselect_module|
-  Facter.add("eselect_#{eselect_module}") do
+def facter_add(name, output)
+  Facter.add(name) do
     confine :operatingsystem => :gentoo
     setcode do
-      %x{eselect --brief --no-color #{eselect_module} show}.strip.split(' ')[0]
+      output
     end
+  end
+end
+
+eselect_modules.each do |eselect_module|
+  if eselect_modules_multitarget.keys.include? eselect_module
+    eselect_modules_multitarget[eselect_module].each do |target|
+      output = %x{eselect --brief --no-color #{eselect_module} show #{target}}.strip
+      facter_add("eselect_#{eselect_module}_#{target}", output)
+    end
+  else
+    output = %x{eselect --brief --no-color #{eselect_module} show}.strip.split(' ')[0]
+    facter_add("eselect_#{eselect_module}", output)
   end
 end
