@@ -1,5 +1,4 @@
-#!/usr/bin/env rspec
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "spec_helper"))
+require 'spec_helper'
 
 type_class = Puppet::Type.type(:package_unmask)
 
