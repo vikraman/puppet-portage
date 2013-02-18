@@ -1,39 +1,36 @@
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:package_use).provider(:parsed)
-
-describe provider_class do
+describe Puppet::Type.type(:package_use).provider(:parsed) do
   before do
-    @provider = provider_class
-    @provider.stubs(:filetype).returns(Puppet::Util::FileType::FileTypeRam)
-    @provider.stubs(:filetype=)
-    @default_target = @provider.default_target
+    described_class.stubs(:filetype).returns(Puppet::Util::FileType::FileTypeRam)
+    described_class.stubs(:filetype=)
+    @default_target = described_class.default_target
   end
 
   it "should have a default target of /etc/portage/package.use/default" do
-    @provider.default_target.should == "/etc/portage/package.use/default"
+    described_class.default_target.should == "/etc/portage/package.use/default"
   end
 
   describe "when parsing" do
 
     it "should parse out the package name" do
       line = "app-admin/tree doc"
-      @provider.parse_line(line)[:name].should == "app-admin/tree"
+      described_class.parse_line(line)[:name].should == "app-admin/tree"
     end
 
     it "should not raise an error if no use flags are given for a package" do
       line = "app-admin/tree"
-      lambda { @provider.parse_line(line) }.should_not raise_error
+      lambda { described_class.parse_line(line) }.should_not raise_error
     end
 
     it "should parse out a single use flag" do
       line = "app-admin/tree doc"
-      @provider.parse_line(line)[:use].should == %w{doc}
+      described_class.parse_line(line)[:use].should == %w{doc}
     end
 
     it "should parse out multiple use flags into an array" do
       line = "app-admin/tree doc -debug"
-      @provider.parse_line(line)[:use].should == %w{doc -debug}
+      described_class.parse_line(line)[:use].should == %w{doc -debug}
     end
   end
 
@@ -41,17 +38,17 @@ describe provider_class do
     before :each do
       @ramfile = Puppet::Util::FileType::FileTypeRam.new(@default_target)
       File.stubs(:exist?).with('/etc/portage/package.use').returns(true)
-      @provider.any_instance.stubs(:target_object).returns(@ramfile)
+      described_class.any_instance.stubs(:target_object).returns(@ramfile)
 
       resource = Puppet::Type::Package_use.new(:name => 'app-admin/tree')
       resource.stubs(:should).with(:target).returns(@default_target)
 
-      @providerinstance = @provider.new(resource)
+      @providerinstance = described_class.new(resource)
       @providerinstance.ensure = :present
     end
 
     after :each do
-      @provider.clear
+      described_class.clear
     end
 
     it "should write an atom name to disk" do
