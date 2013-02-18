@@ -1,8 +1,8 @@
-eselect_modules = %x(eselect modules list).split("  ").reject! { |c| c.empty? }
+eselect_modules = %x(eselect modules list).split('  ').reject! { |c| c.empty? }
 eselect_modules = eselect_modules.delete_if { |c| c["\n"] }
 eselect_modules_blacklist = [
-  "help", "usage", "version", "bashcomp", "env", "fontconfig", "modules",
-  "news", "rc",
+  'help', 'usage', 'version', 'bashcomp', 'env', 'fontconfig', 'modules',
+  'news', 'rc',
 ]
 eselect_modules = eselect_modules - eselect_modules_blacklist
 
