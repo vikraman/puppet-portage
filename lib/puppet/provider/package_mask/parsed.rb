@@ -2,7 +2,7 @@ require 'puppet/provider/portagefile'
 require 'puppet/util/portage'
 
 Puppet::Type.type(:package_mask).provide(:parsed,
-  :parent => Puppet::Provider::ParsedFile,
+  :parent => Puppet::Provider::PortageFile,
   :default_target => "/etc/portage/package.mask/default",
   :filetype => :flat
 ) do
