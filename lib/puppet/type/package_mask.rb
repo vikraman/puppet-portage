@@ -6,9 +6,7 @@ Puppet::Type.newtype(:package_mask) do
         target  => 'chef',
       }"
 
-  ensurable do
-    defaultto :present
-  end
+  ensurable
 
   newparam(:name) do
     desc "The package name"

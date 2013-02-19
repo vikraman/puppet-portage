@@ -6,9 +6,7 @@ Puppet::Type.newtype(:package_unmask) do
         target  => 'puppet',
       }"
 
-  ensurable do
-    defaultto :present
-  end
+  ensurable
 
   newparam(:name) do
     desc "The package name"
