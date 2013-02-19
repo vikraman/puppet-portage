@@ -5,7 +5,7 @@ module Puppet::Util::Portage
 
   extend self
 
-  CATEGORY_PATTERN = '[a-zA-Z0-9]+(:?-[a-zA-Z0-9]+)?'
+  CATEGORY_PATTERN = '[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)?'
   NAME_PATTERN     = '[\w+-]+'
   PACKAGE_PATTERN  = "(#{CATEGORY_PATTERN}/#{NAME_PATTERN})"
   COMPARE_PATTERN  = '([<>=~]|[<>]=)'
