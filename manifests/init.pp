@@ -43,15 +43,15 @@ class portage (
 
   exec { 'changed_makeconf_use':
     command     => '/usr/bin/emerge --changed-use @world',
-    require     => Concat[$make_conf],
     refreshonly => true,
     timeout     => 43200,
   }
 
   concat { $make_conf:
-    owner => root,
-    group => root,
-    mode  => 644,
+    owner  => root,
+    group  => root,
+    mode   => 644,
+    notify => Exec['changed_makeconf_use'],
   }
 
   concat::fragment { 'makeconf_header':
