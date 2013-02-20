@@ -15,6 +15,8 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
     catalog.clear
   end
 
+  subject { File.read(path) }
+
   describe "a single instance" do
 
     describe "without a version" do
@@ -27,12 +29,8 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
         )
       end
 
-      it 'should match the fixture' do
-        actual = File.read(path)
-
-        actual.slice!("app-admin/dummy\n").should_not be_nil
-        actual.should be_empty
-      end
+      it { should have(1).lines }
+      it { should match %r[^app-admin/dummy$] }
     end
 
     describe "with a version" do
@@ -46,12 +44,8 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
         )
       end
 
-      it 'should match the fixture' do
-        actual = File.read(path)
-
-        actual.slice!(">=app-admin/versioned-atom-3.1.2-r1\n").should_not be_nil
-        actual.should be_empty
-      end
+      it { should have(1).lines }
+      it { should match %r[^>=app-admin/versioned-atom-3.1.2-r1$] }
     end
   end
 
@@ -74,13 +68,9 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
         r
       end
 
-      it 'should match the fixture' do
-        actual = File.read(path)
-
-        actual.slice!("app-admin/first\n").should_not be_nil
-        actual.slice!("app-admin/second\n").should_not be_nil
-        actual.should be_empty
-      end
+      it { should have(2).lines }
+      it { should match %r[^app-admin/first$] }
+      it { should match %r[^app-admin/second$] }
     end
   end
 end
