@@ -21,12 +21,14 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
     describe "without a version" do
       describe "with a single keyword" do
         let(:resources) do
-          [] << type_class.new(
+          r = []
+          r << type_class.new(
             :name     => 'app-admin/dummy',
             :keywords => '~amd64',
             :target   => path,
             :provider => :parsed
           )
+          r
         end
 
         it { should have(1).lines }
@@ -35,12 +37,14 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
 
       describe "with multiple keywords" do
         let(:resources) do
-          [] << type_class.new(
+          r = []
+          r << type_class.new(
             :name     => 'app-admin/dummy',
             :keywords => ['~amd64', '~x86'],
             :target   => path,
             :provider => :parsed
           )
+          r
         end
 
         it { should have(1).lines }
@@ -50,13 +54,15 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
     describe "with a version" do
       describe "with a single keyword" do
         let(:resources) do
-          [] << type_class.new(
+          r = []
+          r << type_class.new(
             :name     => 'app-admin/dummy',
             :keywords => '~amd64',
             :target   => path,
             :version  => '>=2.3.4-alpha1',
             :provider => :parsed
           )
+          r
         end
 
         it { should have(1).lines }
@@ -65,13 +71,15 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
 
       describe "with multiple keywords" do
         let(:resources) do
-          [] << type_class.new(
+          r = []
+          r << type_class.new(
             :name     => 'app-admin/dummy',
             :keywords => ['~amd64', '~x86'],
             :target   => path,
             :version  => '>=2.3.4-alpha1',
             :provider => :parsed
           )
+          r
         end
 
         it { should have(1).lines }

@@ -22,11 +22,13 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
     describe "without a version" do
       let(:resources) do
         # Well this is fucking cryptic.
-        [] << type_class.new(
+        r = []
+        r << type_class.new(
           :name     => 'app-admin/dummy',
           :target   => path,
           :provider => :parsed
         )
+        r
       end
 
       it { should have(1).lines }
@@ -35,13 +37,14 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
 
     describe "with a version" do
       let(:resources) do
-        # This too. Srsly. wat.
-        [] << type_class.new(
+        r = []
+        r << type_class.new(
           :name     => 'app-admin/versioned-atom',
           :target   => path,
           :version  => '>=3.1.2-r1',
           :provider => :parsed
         )
+        r
       end
 
       it { should have(1).lines }
