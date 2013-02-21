@@ -1,13 +1,10 @@
 Puppet Gentoo Portage Module
 ============================
 
-Provides Gentoo portage features for Puppet.
+Provides Gentoo Portage features for Puppet.
 
 Travis Test status: [![Build
 Status](https://travis-ci.org/adrienthebo/puppet-portage.png?branch=master)](https://travis-ci.org/adrienthebo/puppet-portage)
-
-Functionality
--------------
 
 ## /etc/portage/package.\*/\*
 
@@ -95,6 +92,10 @@ The variables keywords, mask and unmask also accept the special value
  of the above package\_\* types, you can just omit the version attribute.)  
 Any change in portage::package will also trigger the appropriate re-emerge
 to the affected package.
+
+## facts
+
+All make.conf variables and most of the eselect modules are shown by facter
 
 See Also
 --------
