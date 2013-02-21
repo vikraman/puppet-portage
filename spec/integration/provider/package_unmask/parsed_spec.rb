@@ -10,9 +10,12 @@ describe Puppet::Type.type(:package_unmask).provider(:parsed) do
 
     catalog = Puppet::Resource::Catalog.new
     resources.each { |r| catalog.add_resource r }
+
     catalog.apply
     example.run
+
     catalog.clear
+    described_class.clear
   end
 
   subject { File.read(path) }
