@@ -7,7 +7,10 @@ Puppet::Type.newtype(:package_keywords) do
         target  => 'puppet',
       }"
 
-  ensurable
+  ensurable do
+    defaultvalues
+    defaultto :present
+  end
 
   newparam(:name) do
     desc "The package name"
@@ -15,8 +18,18 @@ Puppet::Type.newtype(:package_keywords) do
     isnamevar
 
     validate do |value|
-      unless Puppet::Util::Portage.valid_atom? value
-        raise Puppet::Error, "name must be a properly formatted atom, see man portage(5) for more information"
+      unless Puppet::Util::Portage.valid_package? value
+        raise ArgumentError, "name must be a properly formatted atom, see man portage(5) for more information"
+      end
+    end
+  end
+
+  newproperty(:version) do
+    desc "A properly formatted version string"
+
+    validate do |value|
+      unless Puppet::Util::Portage.valid_version? value
+        raise ArgumentError, "name must be a properly formatted version"
       end
     end
   end
@@ -25,7 +38,7 @@ Puppet::Type.newtype(:package_keywords) do
     desc "The keywords(s) to use"
 
     validate do |value|
-      raise Puppet::Error, "Keyword cannot contain whitespace" if value =~ /\s/
+      raise ArgumentError, "Keyword cannot contain whitespace" if value =~ /\s/
     end
 
     def insync?(is)

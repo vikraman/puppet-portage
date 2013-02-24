@@ -1,12 +1,15 @@
 require 'puppet/util/portage'
 Puppet::Type.newtype(:package_mask) do
   @doc = "Mask packages in portage.
-  
+
       package_mask { 'app-admin/chef':
         target  => 'chef',
       }"
 
-  ensurable
+  ensurable do
+    defaultvalues
+    defaultto :present
+  end
 
   newparam(:name) do
     desc "The package name"
@@ -15,8 +18,18 @@ Puppet::Type.newtype(:package_mask) do
 
     validate do |value|
 
-      unless Puppet::Util::Portage.valid_atom? value
-        raise Puppet::Error, "name must be a properly formatted atom, see portage(5) for more information"
+      unless Puppet::Util::Portage.valid_package? value
+        raise ArgumentError, "name must be a properly formatted atom, see portage(5) for more information"
+      end
+    end
+  end
+
+  newproperty(:version) do
+    desc "A properly formatted version string"
+
+    validate do |value|
+      unless Puppet::Util::Portage.valid_version? value
+        raise ArgumentError, "name must be a properly formatted version"
       end
     end
   end

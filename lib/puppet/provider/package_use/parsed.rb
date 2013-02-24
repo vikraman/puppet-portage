@@ -1,5 +1,5 @@
-require 'puppet/util/portage'
 require 'puppet/provider/portagefile'
+require 'puppet/util/portage'
 
 Puppet::Type.type(:package_use).provide(:parsed,
   :parent => Puppet::Provider::PortageFile,
@@ -9,32 +9,17 @@ Puppet::Type.type(:package_use).provide(:parsed,
 
   desc "The package_use provider that uses the ParsedFile class"
 
-  record_line :parsed, :fields => %w{name use},
-    :joiner => ' ',
-    :rts  => true do |line|
-    hash = {}
-    if line =~ /^(\S+)\s+(.*)\s*$/
-      hash[:name] = $1
-      use = $2
-
-      unless use == ""
-        hash[:use] = use.split(/\s+/)
-      end
-    # just a package
-    elsif line =~ /^(\S+)\s*/
-      hash[:name] = $1
-    else
-      raise Puppet::Error, "Could not match '%s'" % line
-    end
-
-    if hash[:use] == ""
-      hash.delete(:use)
-    end
-
-    hash
+  record_line :parsed, :fields => %w{name use}, :joiner => ' ', :rts => true do |line|
+    Puppet::Provider::PortageFile.process_line(line, :use)
   end
 
+  # Define the ParsedFile format hook
+  #
+  # @param [Hash] hash
+  #
+  # @return [String]
   def self.to_line(hash)
+    return super unless hash[:record_type] == :parsed
     build_line(hash, :use)
   end
 end
