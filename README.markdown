@@ -12,7 +12,7 @@ Status](https://travis-ci.org/adrienthebo/puppet-portage.png?branch=master)](htt
 
     package_use { 'app-admin/puppet':
       use     => ['flag1', 'flag2'],
-      target  => 'puppet-flags",
+      target  => 'puppet-flags',
       version => '>=3.0.1',
       ensure  => present,
     }
