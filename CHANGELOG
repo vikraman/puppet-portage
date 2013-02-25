@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+2.0.0
+-----
+
+2013-02-24
+
+This is a backwards incompatible feature release.
+
+For an overview of the new usage, please see the README at
+https://github.com/adrienthebo/puppet-portage/blob/master/README.markdown
+
+  * (portage-#20) package_* version is now an independent field
+  * (portage-#41) Default package_* to present
+  * Remove portage class parameters in favor of portage::makeconf
+  * (portage-#29) Add eselect type and provider
+
 1.1.1
 -----
 
