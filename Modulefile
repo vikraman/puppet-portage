@@ -1,5 +1,5 @@
 name 'adrien-portage'
-version '2.0.0-rc1'
+version '2.0.0'
 license 'GPLv2'
 summary 'Puppet types and providers for Gentoo portage'
 project_page 'https://github.com/adrienthebo/puppet-portage'
