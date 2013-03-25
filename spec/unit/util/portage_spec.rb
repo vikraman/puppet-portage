@@ -73,6 +73,9 @@ describe Puppet::Util::Portage do
       '1.3',
       '0.5.2_pre20120527',
       '3.0_alpha12',
+      '2.2*',
+      '5.1-alpha*',
+      '3.*.0',
     ]
 
     invalid_versions = [

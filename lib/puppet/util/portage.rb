@@ -9,7 +9,7 @@ module Puppet::Util::Portage
   NAME_PATTERN     = '[\w+-]+'
   PACKAGE_PATTERN  = "(#{CATEGORY_PATTERN}/#{NAME_PATTERN})"
   COMPARE_PATTERN  = '([<>=~]|[<>]=)'
-  VERSION_PATTERN  = '([\d.]+[\w-]*)'
+  VERSION_PATTERN  = '([\d.*]+[\w*-]*)'
 
   BASE_ATOM_REGEX      = Regexp.new "^#{PACKAGE_PATTERN}$"
   VERSIONED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$"
