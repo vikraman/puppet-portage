@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+2.0.1
+-----
+
+2013-03-24
+
+This is a backwards compatible bugfix release
+
+  * Apply eselect facts only in Gentoo systems
+  * (portage-#62) Allow `*` in package_* version field
+  * Refactor tests to use shared examples and contexts.
+
+
 2.0.0
 -----
 
