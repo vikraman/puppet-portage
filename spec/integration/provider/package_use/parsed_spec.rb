@@ -1,22 +1,10 @@
 require 'spec_helper'
 
+require 'support/integration/provider/shared_contexts'
+
 describe Puppet::Type.type(:package_use).provider(:parsed) do
 
-  let(:path) { PuppetIntegration::TmpdirManager.instance.tmpfile }
-  let(:type_class) { Puppet::Type.type(:package_use) }
-
-  around(:each) do |example|
-    described_class.stubs(:header).returns ''
-
-    catalog = Puppet::Resource::Catalog.new
-    resources.each { |r| catalog.add_resource r }
-
-    catalog.apply
-    example.run
-
-    catalog.clear
-    described_class.clear
-  end
+  include_context "portagefile integration runner"
 
   subject { File.read(path) }
 
