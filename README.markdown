@@ -57,11 +57,11 @@ If you want to change it, you should do the following:
 
 In order to add entries to make.conf:
 
-    portage::make_conf { 'use':
+    portage::makeconf { 'use':
       content => 'flag1 flag2',
       ensure  => present,
     }
-    portage::make_conf { 'portdir_overlay':
+    portage::makeconf { 'portdir_overlay':
       content => '/var/lib/layman',
       ensure  => present,
     }
