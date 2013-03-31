@@ -1,4 +1,6 @@
+require 'puppet/property/portage_version'
 require 'puppet/util/portage'
+
 Puppet::Type.newtype(:package_keywords) do
   @doc = "Set keywords for a package.
 
@@ -24,15 +26,7 @@ Puppet::Type.newtype(:package_keywords) do
     end
   end
 
-  newproperty(:version) do
-    desc "A properly formatted version string"
-
-    validate do |value|
-      unless Puppet::Util::Portage.valid_version? value
-        raise ArgumentError, "name must be a properly formatted version"
-      end
-    end
-  end
+  newproperty(:version, :parent => Puppet::Property::PortageVersion)
 
   newproperty(:keywords) do
     desc "The keywords(s) to use"

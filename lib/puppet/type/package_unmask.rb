@@ -1,4 +1,6 @@
+require 'puppet/property/portage_version'
 require 'puppet/util/portage'
+
 Puppet::Type.newtype(:package_unmask) do
   @doc = "Unmask packages in portage.
 
@@ -24,15 +26,7 @@ Puppet::Type.newtype(:package_unmask) do
     end
   end
 
-  newproperty(:version) do
-    desc "A properly formatted version string"
-
-    validate do |value|
-      unless Puppet::Util::Portage.valid_version? value
-        raise ArgumentError, "name must be a properly formatted version"
-      end
-    end
-  end
+  newproperty(:version, :parent => Puppet::Property::PortageVersion)
 
   newproperty(:target) do
     desc "The location of the package.unmask file"
