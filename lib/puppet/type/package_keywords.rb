@@ -1,4 +1,5 @@
 require 'puppet/property/portage_version'
+require 'puppet/parameter/portage_name'
 require 'puppet/util/portage'
 
 Puppet::Type.newtype(:package_keywords) do
@@ -14,17 +15,7 @@ Puppet::Type.newtype(:package_keywords) do
     defaultto :present
   end
 
-  newparam(:name) do
-    desc "The package name"
-
-    isnamevar
-
-    validate do |value|
-      unless Puppet::Util::Portage.valid_package? value
-        raise ArgumentError, "name must be a properly formatted atom, see man portage(5) for more information"
-      end
-    end
-  end
+  newparam(:name, :isnamevar => true, :parent => Puppet::Parameter::PortageName)
 
   newproperty(:version, :parent => Puppet::Property::PortageVersion)
 

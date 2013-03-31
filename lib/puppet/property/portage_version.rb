@@ -1,7 +1,6 @@
 require 'puppet/util/portage'
 require 'puppet/property'
 
-
 class Puppet::Property::PortageVersion < Puppet::Property
   desc "A properly formatted version string"
 
