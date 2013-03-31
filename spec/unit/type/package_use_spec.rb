@@ -32,15 +32,15 @@ describe Puppet::Type.type(:package_use) do
 
   describe "when validating the use property" do
     it "should accept a string for use" do
-      lambda { described_class.new(:name => "sys-devel/gcc", :use => "openmp") }.should_not raise_error
+      expect { described_class.new(:name => "sys-devel/gcc", :use => "openmp") }.to_not raise_error
     end
 
     it "should reject use flags with a space" do
-      lambda { described_class.new(:name => "sys-devel/gcc", :use => "open mp") }.should raise_error
+      expect { described_class.new(:name => "sys-devel/gcc", :use => "open mp") }.to raise_error
     end
 
     it "should accept an array for use" do
-      lambda { described_class.new(:name => "sys-devel/gcc", :use => ["doc","openmp"]) }.should_not raise_error
+      expect { described_class.new(:name => "sys-devel/gcc", :use => ["doc","openmp"]) }.to_not raise_error
     end
   end
 

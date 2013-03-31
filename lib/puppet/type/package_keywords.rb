@@ -1,4 +1,7 @@
+require 'puppet/property/portage_version'
+require 'puppet/parameter/portage_name'
 require 'puppet/util/portage'
+
 Puppet::Type.newtype(:package_keywords) do
   @doc = "Set keywords for a package.
 
@@ -12,27 +15,9 @@ Puppet::Type.newtype(:package_keywords) do
     defaultto :present
   end
 
-  newparam(:name) do
-    desc "The package name"
+  newparam(:name, :isnamevar => true, :parent => Puppet::Parameter::PortageName)
 
-    isnamevar
-
-    validate do |value|
-      unless Puppet::Util::Portage.valid_package? value
-        raise ArgumentError, "name must be a properly formatted atom, see man portage(5) for more information"
-      end
-    end
-  end
-
-  newproperty(:version) do
-    desc "A properly formatted version string"
-
-    validate do |value|
-      unless Puppet::Util::Portage.valid_version? value
-        raise ArgumentError, "name must be a properly formatted version"
-      end
-    end
-  end
+  newproperty(:version, :parent => Puppet::Property::PortageVersion)
 
   newproperty(:keywords) do
     desc "The keywords(s) to use"
