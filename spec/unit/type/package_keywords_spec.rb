@@ -32,15 +32,15 @@ describe Puppet::Type.type(:package_keywords) do
 
   describe "when validating the keywords property" do
     it "should accept a string for keywords" do
-      lambda { described_class.new(:name => "sys-devel/gcc", :keywords => "~amd64") }.should_not raise_error
+      expect { described_class.new(:name => "sys-devel/gcc", :keywords => "~amd64") }.to_not raise_error
     end
 
     it "should reject keywords with a space" do
-      lambda { described_class.new(:name => "sys-devel/gcc", :keywords => "~amd 64") }.should raise_error
+      expect { described_class.new(:name => "sys-devel/gcc", :keywords => "~amd 64") }.to raise_error
     end
 
     it "should accept an array for keywords" do
-      lambda { described_class.new(:name => "sys-devel/gcc", :keywords => ["~amd64", "~x86"]) }.should_not raise_error
+      expect { described_class.new(:name => "sys-devel/gcc", :keywords => ["~amd64", "~x86"]) }.to_not raise_error
     end
   end
 
