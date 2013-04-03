@@ -2,7 +2,7 @@ require 'puppet/util/portage'
 require 'puppet/parameter'
 
 class Puppet::Parameter::PortageName < Puppet::Parameter
-    desc "The package name"
+  desc "The package name"
 
   validate do |value|
 
