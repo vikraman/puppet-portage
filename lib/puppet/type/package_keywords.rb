@@ -15,7 +15,7 @@ Puppet::Type.newtype(:package_keywords) do
     defaultto :present
   end
 
-  newparam(:name, :isnamevar => true, :parent => Puppet::Parameter::PortageName)
+  newparam(:name, :namevar => true, :parent => Puppet::Parameter::PortageName)
 
   newproperty(:version, :parent => Puppet::Property::PortageVersion)
 

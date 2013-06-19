@@ -1,6 +1,6 @@
 Puppet::Type.newtype(:eselect) do
 
-  newparam(:name, :isnamevar => true) do
+  newparam(:name, :namevar => true) do
     desc "The name of the eselect module."
   end
 
