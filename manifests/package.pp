@@ -40,6 +40,10 @@
 #
 # An optional version specification for package use
 #
+# [*use_slot*]
+#
+# An optional slot specification for package use
+#
 # [*keywords_version*]
 #
 # An optional version specification for package keywords
@@ -73,6 +77,7 @@ define portage::package (
     $ensure           = undef,
     $use              = undef,
     $use_version      = undef,
+    $use_slot         = undef,
     $keywords         = undef,
     $keywords_version = undef,
     $mask             = undef,
@@ -159,6 +164,7 @@ define portage::package (
     package_use { $name:
       use     => $use,
       version => $use_version,
+      slot    => $use_slot,
       target  => $assigned_use_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }

@@ -55,6 +55,10 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
       hash[:name]    = components[:package]
       hash[:version] = v
 
+      if components[:slot]
+        hash[:slot] = components[:slot].dup
+      end
+
       attr_array = match[2].split(/\s+/)
       unless attr_array.empty?
         hash[attribute] = attr_array
@@ -71,6 +75,11 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
 
       hash[:name]    = components[:package]
       hash[:version] = v
+
+      if components[:slot]
+        hash[:slot] = components[:slot].dup
+      end
+
     else
       raise Puppet::Error, "Could not match '#{line}'"
     end

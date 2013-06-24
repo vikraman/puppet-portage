@@ -10,10 +10,14 @@ module Puppet::Util::Portage
   PACKAGE_PATTERN  = "(#{CATEGORY_PATTERN}/#{NAME_PATTERN})"
   COMPARE_PATTERN  = '([<>=~]|[<>]=)'
   VERSION_PATTERN  = '([\d.*]+[\w*-]*)'
+  SLOT_SEPARATOR   = ':'
+  SLOT_PATTERN     = '([\w+./*=-]+)'
 
-  BASE_ATOM_REGEX      = Regexp.new "^#{PACKAGE_PATTERN}$"
-  VERSIONED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$"
-  DEPEND_ATOM_REGEX    = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX
+  BASE_ATOM_REGEX              = Regexp.new "^#{PACKAGE_PATTERN}$"
+  VERSIONED_ATOM_REGEX         = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$"
+  SLOTTED_ATOM_REGEX           = Regexp.new "^#{PACKAGE_PATTERN}#{SLOT_SEPARATOR}#{SLOT_PATTERN}$"
+  VERSIONED_SLOTTED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}#{SLOT_SEPARATOR}#{SLOT_PATTERN}$"
+  DEPEND_ATOM_REGEX            = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX, SLOTTED_ATOM_REGEX, VERSIONED_SLOTTED_ATOM_REGEX
 
   # Determine if a string is a valid DEPEND atom
   #
@@ -50,11 +54,25 @@ module Puppet::Util::Portage
     !!(version_str =~ regex)
   end
 
+  # Determine if a string is a valid DEPEND atom slot
+  #
+  # This validates a standalone slot string.
+  #
+  # @param [String] slot_str The string to validate as a slot string.
+  #
+  # @return [TrueClass]
+  # @Return [FalseClass]
+  def valid_slot?(slot_str)
+    regex = Regexp.new "^#{SLOT_PATTERN}$"
+    !!(slot_str =~ regex)
+  end
+
   # Parse a string into the different components of a DEPEND atom.
   #
   # If the atom is versioned, the returned value will contain the keys
   # :package, :compare, and :version. If the atom is unversioned then it will
-  # contain the key :package.
+  # contain the key :package. If the atom is slotted then it will contain the
+  # key :slot.
   #
   # @raise [Puppet::Util::Portage::AtomError]
   #
@@ -66,6 +84,10 @@ module Puppet::Util::Portage
       {:package => match[1]}
     elsif (match = atom.match(VERSIONED_ATOM_REGEX))
       {:compare => (match[1] || '='), :package => match[2], :version => match[3]}
+    elsif (match = atom.match(SLOTTED_ATOM_REGEX))
+      {:package => match[1], :slot => match[2]}
+    elsif (match = atom.match(VERSIONED_SLOTTED_ATOM_REGEX))
+      {:compare => (match[1] || '='), :package => match[2], :version => match[3], :slot => match[4]}
     else
       raise AtomError, "#{atom} is not a valid atom"
     end
@@ -97,6 +119,10 @@ module Puppet::Util::Portage
       str << ver_hash[:version]
     else
       str = hash[:name].dup
+    end
+    if hash[:slot]
+      str << ':'
+      str << hash[:slot]
     end
 
     str
