@@ -52,22 +52,30 @@
 #
 # An optional slot specification for package keywords
 #
-# [*mask*]
+# [*mask_version*]
 #
 # An optional version specification for package mask
 #
-# [*unmask*]
+# [*mask_slot*]
+#
+# An optional slot specification for package mask
+#
+# [*unmask_version*]
 #
 # An optional version specification for package unmask
+#
+# [*unmask_slot*]
+#
+# An optional slot specification for package unmask
 #
 # == Example
 #
 #     portage::package { 'app-admin/puppet':
-#       ensure   => '3.0.1',
-#       use      => ['augeas', '-rrdtool'],
-#       keywords => '~amd64',
-#       target   => 'puppet',
-#       mask     => '<=2.7.18',
+#       ensure       => '3.0.1',
+#       use          => ['augeas', '-rrdtool'],
+#       keywords     => '~amd64',
+#       target       => 'puppet',
+#       mask_version => '<=2.7.18',
 #     }
 #
 # == See Also
@@ -85,8 +93,10 @@ define portage::package (
     $keywords         = undef,
     $keywords_version = undef,
     $keywords_slot    = undef,
-    $mask             = undef,
-    $unmask           = undef,
+    $mask_version     = undef,
+    $mask_slot        = undef,
+    $unmask_version   = undef,
+    $unmask_slot      = undef,
     $target           = undef,
     $use_target       = undef,
     $keywords_target  = undef,
@@ -138,29 +148,31 @@ define portage::package (
     }
   }
 
-  if $unmask {
-    if $unmask == 'all' {
-      $assigned_unmask = undef
+  if $unmask_version or $unmask_slot {
+    if $unmask_version == 'all' {
+      $assigned_unmask_version = undef
     }
     else {
-      $assigned_unmask = $unmask
+      $assigned_unmask_version = $unmask_version
     }
     package_unmask { $name:
-      version => $assigned_unmask,
+      version => $assigned_unmask_version,
+      slot    => $unmask_slot,
       target  => $assigned_unmask_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
-  if $mask {
-    if $mask == 'all' {
-      $assigned_mask = undef
+  if $mask_version or $mask_slot {
+    if $mask_version == 'all' {
+      $assigned_mask_version = undef
     }
     else {
-      $assigned_mask = $mask
+      $assigned_mask_version = $mask_version
     }
     package_mask { $name:
-      version => $assigned_mask,
+      version => $assigned_mask_version,
+      slot    => $mask_slot,
       target  => $assigned_mask_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
