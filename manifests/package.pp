@@ -48,6 +48,10 @@
 #
 # An optional version specification for package keywords
 #
+# [*keywords_slot*]
+#
+# An optional slot specification for package keywords
+#
 # [*mask*]
 #
 # An optional version specification for package mask
@@ -80,6 +84,7 @@ define portage::package (
     $use_slot         = undef,
     $keywords         = undef,
     $keywords_version = undef,
+    $keywords_slot    = undef,
     $mask             = undef,
     $unmask           = undef,
     $target           = undef,
@@ -127,6 +132,7 @@ define portage::package (
     package_keywords { $name:
       keywords => $assigned_keywords,
       version  => $keywords_version,
+      slot     => $keywords_slot,
       target   => $assigned_keywords_target,
       notify   => [Exec["rebuild_${name}"], Package[$name]],
     }
