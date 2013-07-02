@@ -4,7 +4,7 @@ shared_examples "a portagefile mask provider" do
 
   describe "with single instance" do
 
-    describe "without a version" do
+    describe "without a version or slot" do
       let(:resources) do
         # Well this is fucking cryptic.
         r = []
@@ -20,20 +20,21 @@ shared_examples "a portagefile mask provider" do
       it { should match %r[^app-admin/dummy$] }
     end
 
-    describe "with a version" do
+    describe "with a version and slot" do
       let(:resources) do
         r = []
         r << type_class.new(
-          :name     => 'app-admin/versioned-atom',
+          :name     => 'app-admin/dummy',
           :target   => path,
           :version  => '>=3.1.2-r1',
+          :slot     => '3',
           :provider => :parsed
         )
         r
       end
 
       it { should have(1).lines }
-      it { should match %r[^>=app-admin/versioned-atom-3.1.2-r1$] }
+      it { should match %r[^>=app-admin/dummy-3.1.2-r1:3$] }
     end
   end
 
@@ -62,4 +63,3 @@ shared_examples "a portagefile mask provider" do
     end
   end
 end
-
