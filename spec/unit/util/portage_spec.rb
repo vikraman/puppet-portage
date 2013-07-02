@@ -12,6 +12,12 @@ describe Puppet::Util::Portage do
       '>foo/bar-1.1.0',
       '<foo/bar-1.0.0',
       'foo1-bar2/messy_atom++',
+      'foo/bar:1',
+      '=foo/bar-1.0.0:1',
+      '>=foo/bar-1.0.0:1',
+      '<=foo/bar-1.0.0:1',
+      '>foo/bar-1.1.0:1',
+      '<foo/bar-1.0.0:1',
     ]
 
     invalid_atoms = [
@@ -19,6 +25,8 @@ describe Puppet::Util::Portage do
       '=sys-devel/gcc',
       # version without quantifier
       'foo1-bar2/messy_atom++-1.0',
+      # slot with quantifier
+      '=sys-devel/gcc:4.8',
     ]
 
     valid_atoms.each do |atom|
@@ -50,6 +58,8 @@ describe Puppet::Util::Portage do
       'gcc',
       'sys-dev-gcc',
       '=app-admin/eselect-fontconfig-1.1',
+      'sys-devel/gcc:4.8',
+      '>sys-devel/gcc-4.8.0:4.8',
     ]
 
     valid_packages.each do |package|
@@ -109,6 +119,57 @@ describe Puppet::Util::Portage do
     end
   end
 
+  describe "valid_slot?" do
+    operators = %w{= * %s= %s/%s}
+
+    valid_slots = [
+      '_',
+      'a',
+      '4.8',
+      'live',
+      'stable',
+      'alpha-3',
+      'alpha+beta'
+    ]
+
+    invalid_slots = [
+      '',
+      '!3',
+      '~alpha',
+      '>4.8',
+      '>=4.8',
+    ]
+
+    valid_slots.each do |slot|
+      it "should accept #{slot} as valid" do
+        Puppet::Util::Portage.valid_slot?(slot).should be_true
+      end
+    end
+
+    describe 'with slot operators' do
+      slots_with_operators = Set.new
+      operators.each do |oper|
+        valid_slots.each do |slot|
+          valid_slots.each do |subslot|
+            slot_str = oper % [slot, subslot]
+            slots_with_operators << slot_str
+          end
+        end
+      end
+      slots_with_operators.each do |slot_str|
+        it "should accept #{slot_str} as valid" do
+          Puppet::Util::Portage.valid_slot?(slot_str).should be_true
+        end
+      end
+    end
+
+    invalid_slots.each do |slot|
+      it "should reject #{slot} as invalid" do
+        Puppet::Util::Portage.valid_slot?(slot).should be_false
+      end
+    end
+  end
+
   describe "parse_atom" do
 
     valid_base_atoms = [
@@ -125,7 +186,7 @@ describe Puppet::Util::Portage do
 
     valid_atoms = [
       {
-        :atom => 'dev-libs/glib-2.32.4-r1',
+        :atom => '=dev-libs/glib-2.32.4-r1',
         :expected => {
           :package => 'dev-libs/glib',
           :version => '2.32.4-r1',
@@ -141,10 +202,10 @@ describe Puppet::Util::Portage do
         }
       },
       {
-        :atom => 'app-misc/dummy-3',
+        :atom => '=app-misc/dummy-2-2.5-r2',
         :expected => {
-          :package => 'app-misc/dummy',
-          :version => '3',
+          :package => 'app-misc/dummy-2',
+          :version => '2.5-r2',
           :compare => '=',
         }
       },
@@ -165,14 +226,56 @@ describe Puppet::Util::Portage do
         }
       },
       {
-        :atom => '>=x11-proto/xproto-7.0.23',
+        :atom => '>=x11-proto/xproto-7.0.23-r1',
         :expected => {
           :package => 'x11-proto/xproto',
           :version => '7.0.23-r1',
           :compare => '>=',
         }
       },
+      {
+        :atom => 'www-client/chromium:live',
+        :expected => {
+          :package => 'www-client/chromium',
+          :slot    => 'live',
+        }
+      },
+      {
+        :atom => '<www-plugins/chrome-binary-plugins-9999:unstable',
+        :expected => {
+          :package => 'www-plugins/chrome-binary-plugins',
+          :version => '9999',
+          :compare => '<',
+          :slot    => 'unstable',
+        }
+      },
+      {
+        :atom => '>=sys-devel/gcc-4.8.1:4.8',
+        :expected => {
+          :package => 'sys-devel/gcc',
+          :version => '4.8.1',
+          :compare => '>=',
+          :slot    => '4.8',
+        }
+      },
+      {
+        :atom => '=dev-lang/ghc-7.6.3:0/7.6.3',
+        :expected => {
+          :package => 'dev-lang/ghc',
+          :version => '7.6.3',
+          :compare => '=',
+          :slot    => '0/7.6.3',
+        }
+      },
     ]
+
+    valid_atoms.each do |atom|
+      atom_str = atom[:atom]
+      atom_hash = atom[:expected]
+      it "should parse #{atom_str} as #{atom_hash}" do
+        Puppet::Util::Portage.parse_atom(atom_str).should == atom_hash
+      end
+    end
 
     invalid_atoms = [
       'gcc',
@@ -181,6 +284,10 @@ describe Puppet::Util::Portage do
       '!app-accessibility/brltty-4.3.2-r4',
       '<dev-libs/userspace-rcu4.1.2',
       '>=sys-dev/gcc-alpha4.5.1',
+      'sys-devel/gcc-4.5*',
+      '>=sys-devel/gcc-r1',
+      '<=sys-devel/gcc:4.8',
+      '>=app-misc/dummy-0.3:!',
     ]
 
     invalid_atoms.each do |atom|
