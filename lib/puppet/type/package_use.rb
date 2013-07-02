@@ -1,4 +1,5 @@
 require 'puppet/property/portage_version'
+require 'puppet/property/portage_slot'
 require 'puppet/parameter/portage_name'
 require 'puppet/util/portage'
 
@@ -15,9 +16,11 @@ Puppet::Type.newtype(:package_use) do
     defaultto :present
   end
 
-  newparam(:name, :isnamevar => true, :parent => Puppet::Parameter::PortageName)
+  newparam(:name, :namevar => true, :parent => Puppet::Parameter::PortageName)
 
   newproperty(:version, :parent => Puppet::Property::PortageVersion)
+
+  newproperty(:slot, :parent => Puppet::Property::PortageSlot)
 
   newproperty(:use) do
     desc "The flag use flag(s) to apply"

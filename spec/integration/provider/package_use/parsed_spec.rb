@@ -9,7 +9,7 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
   subject { File.read(path) }
 
   describe "with a single instance" do
-    describe "without a version" do
+    describe "without a version or slot" do
       describe "with a single keyword" do
         let(:resources) do
           r = []
@@ -42,7 +42,7 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
         it { should match %r[^app-admin/dummy acpi sse2$] }
       end
     end
-    describe "with a version" do
+    describe "with a version and slot" do
       describe "with a single keyword" do
         let(:resources) do
           r = []
@@ -51,13 +51,14 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
             :use      => 'doc',
             :target   => path,
             :version  => '>=2.3.4-alpha1',
+            :slot     => '2',
             :provider => :parsed
           )
           r
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1 doc$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 doc$] }
       end
 
       describe "with multiple use" do
@@ -68,13 +69,14 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
             :use      => ['acpi', 'sse2'],
             :target   => path,
             :version  => '>=2.3.4-alpha1',
+            :slot     => '2',
             :provider => :parsed
           )
           r
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1 acpi sse2$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 acpi sse2$] }
       end
     end
   end

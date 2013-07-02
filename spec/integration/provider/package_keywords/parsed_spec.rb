@@ -9,7 +9,7 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
   subject { File.read(path) }
 
   describe "with a single instance" do
-    describe "without a version" do
+    describe "without a version or slot" do
       describe "with a single keyword" do
         let(:resources) do
           r = []
@@ -42,7 +42,7 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
         it { should match %r[^app-admin/dummy ~amd64 ~x86$] }
       end
     end
-    describe "with a version" do
+    describe "with a version and slot" do
       describe "with a single keyword" do
         let(:resources) do
           r = []
@@ -51,13 +51,14 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
             :keywords => '~amd64',
             :target   => path,
             :version  => '>=2.3.4-alpha1',
+            :slot     => '2',
             :provider => :parsed
           )
           r
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1 ~amd64$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 ~amd64$] }
       end
 
       describe "with multiple keywords" do
@@ -68,13 +69,14 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
             :keywords => ['~amd64', '~x86'],
             :target   => path,
             :version  => '>=2.3.4-alpha1',
+            :slot     => '2',
             :provider => :parsed
           )
           r
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1 ~amd64 ~x86$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 ~amd64 ~x86$] }
       end
     end
   end
