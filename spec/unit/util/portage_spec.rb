@@ -118,9 +118,9 @@ describe Puppet::Util::Portage do
     end
 
     describe 'with comparators' do
-      version_strings = valid_versions.collect_concat { |ver|
+      version_strings = valid_versions.map { |ver|
         comparators.map { |comp| comp + ver }
-      } + valid_wildcards.map { |ver| '=' + ver }
+      }.flatten + valid_wildcards.map { |ver| '=' + ver }
 
       version_strings.each do |ver|
         it "should accept #{ver} as valid" do
