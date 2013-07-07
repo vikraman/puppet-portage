@@ -5,19 +5,21 @@ module Puppet::Util::Portage
 
   extend self
 
-  CATEGORY_PATTERN = '[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)?'
-  NAME_PATTERN     = '[\w+-]+'
+  CATEGORY_PATTERN = '[\w+][\w+.-]*'
+  NAME_PATTERN     = '[\w+][\w+-]*?'
   PACKAGE_PATTERN  = "(#{CATEGORY_PATTERN}/#{NAME_PATTERN})"
   COMPARE_PATTERN  = '([<>=~]|[<>]=)'
-  VERSION_PATTERN  = '([\d.*]+[\w*-]*)'
-  SLOT_SEPARATOR   = ':'
+  VERSION_PATTERN  = '((?:cvs\.)?(?:\d+)(?:(?:\.\d+)*)(?:[a-z]?)(?:(?:_(?:pre|p|beta|alpha|rc)\d*)*)(?:-r(?:\d+))?)'
+  WILDCARD_PATTERN = "(#{VERSION_PATTERN}\\*)"
   SLOT_PATTERN     = '([\w+./*=-]+)'
 
   BASE_ATOM_REGEX              = Regexp.new "^#{PACKAGE_PATTERN}$"
   VERSIONED_ATOM_REGEX         = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$"
-  SLOTTED_ATOM_REGEX           = Regexp.new "^#{PACKAGE_PATTERN}#{SLOT_SEPARATOR}#{SLOT_PATTERN}$"
-  VERSIONED_SLOTTED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}#{SLOT_SEPARATOR}#{SLOT_PATTERN}$"
-  DEPEND_ATOM_REGEX            = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX, SLOTTED_ATOM_REGEX, VERSIONED_SLOTTED_ATOM_REGEX
+  SLOTTED_ATOM_REGEX           = Regexp.new "^#{PACKAGE_PATTERN}:#{SLOT_PATTERN}$"
+  VERSIONED_SLOTTED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}:#{SLOT_PATTERN}$"
+  WILDCARD_ATOM_REGEX          = Regexp.new "^(=?)#{PACKAGE_PATTERN}-#{WILDCARD_PATTERN}$"
+  WILDCARD_SLOTTED_ATOM_REGEX  = Regexp.new "^(=?)#{PACKAGE_PATTERN}-#{WILDCARD_PATTERN}:#{SLOT_PATTERN}$"
+  DEPEND_ATOM_REGEX            = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX, SLOTTED_ATOM_REGEX, VERSIONED_SLOTTED_ATOM_REGEX, WILDCARD_ATOM_REGEX, WILDCARD_SLOTTED_ATOM_REGEX
 
   # Determine if a string is a valid DEPEND atom
   #
@@ -50,7 +52,7 @@ module Puppet::Util::Portage
   # @return [TrueClass]
   # @Return [FalseClass]
   def valid_version?(version_str)
-    regex = Regexp.new "^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$"
+    regex = Regexp.new "^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$|^=?#{WILDCARD_PATTERN}$"
     !!(version_str =~ regex)
   end
 
@@ -84,10 +86,14 @@ module Puppet::Util::Portage
       {:package => match[1]}
     elsif (match = atom.match(VERSIONED_ATOM_REGEX))
       {:compare => (match[1] || '='), :package => match[2], :version => match[3]}
+    elsif (match = atom.match(WILDCARD_ATOM_REGEX))
+      {:compare => match[1], :package => match[2], :version => match[3]}
     elsif (match = atom.match(SLOTTED_ATOM_REGEX))
       {:package => match[1], :slot => match[2]}
     elsif (match = atom.match(VERSIONED_SLOTTED_ATOM_REGEX))
       {:compare => (match[1] || '='), :package => match[2], :version => match[3], :slot => match[4]}
+    elsif (match = atom.match(WILDCARD_SLOTTED_ATOM_REGEX))
+      {:compare => match[1], :package => match[2], :version => match[3], :slot => match[4]}
     else
       raise AtomError, "#{atom} is not a valid atom"
     end

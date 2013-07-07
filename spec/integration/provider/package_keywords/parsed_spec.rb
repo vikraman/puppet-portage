@@ -50,7 +50,7 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
             :name     => 'app-admin/dummy',
             :keywords => '~amd64',
             :target   => path,
-            :version  => '>=2.3.4-alpha1',
+            :version  => '>=2.3.4_alpha1',
             :slot     => '2',
             :provider => :parsed
           )
@@ -58,7 +58,7 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 ~amd64$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4_alpha1:2 ~amd64$] }
       end
 
       describe "with multiple keywords" do
@@ -68,7 +68,7 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
             :name     => 'app-admin/dummy',
             :keywords => ['~amd64', '~x86'],
             :target   => path,
-            :version  => '>=2.3.4-alpha1',
+            :version  => '>=2.3.4_alpha1',
             :slot     => '2',
             :provider => :parsed
           )
@@ -76,7 +76,7 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 ~amd64 ~x86$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4_alpha1:2 ~amd64 ~x86$] }
       end
     end
   end
