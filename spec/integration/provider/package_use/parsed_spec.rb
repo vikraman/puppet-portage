@@ -50,7 +50,7 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
             :name     => 'app-admin/dummy',
             :use      => 'doc',
             :target   => path,
-            :version  => '>=2.3.4-alpha1',
+            :version  => '>=2.3.4_alpha1',
             :slot     => '2',
             :provider => :parsed
           )
@@ -58,7 +58,7 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 doc$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4_alpha1:2 doc$] }
       end
 
       describe "with multiple use" do
@@ -68,7 +68,7 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
             :name     => 'app-admin/dummy',
             :use      => ['acpi', 'sse2'],
             :target   => path,
-            :version  => '>=2.3.4-alpha1',
+            :version  => '>=2.3.4_alpha1',
             :slot     => '2',
             :provider => :parsed
           )
@@ -76,7 +76,7 @@ describe Puppet::Type.type(:package_use).provider(:parsed) do
         end
 
         it { should have(1).lines }
-        it { should match %r[^>=app-admin/dummy-2\.3\.4-alpha1:2 acpi sse2$] }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4_alpha1:2 acpi sse2$] }
       end
     end
   end

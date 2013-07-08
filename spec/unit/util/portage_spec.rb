@@ -18,6 +18,10 @@ describe Puppet::Util::Portage do
       '<=foo/bar-1.0.0:1',
       '>foo/bar-1.1.0:1',
       '<foo/bar-1.0.0:1',
+      'foo/bar-1.0*',
+      '=foo/bar-1.0*',
+      'foo/bar-1.0*:1',
+      '=foo/bar-1.0*:1',
     ]
 
     invalid_atoms = [
@@ -27,6 +31,8 @@ describe Puppet::Util::Portage do
       'foo1-bar2/messy_atom++-1.0',
       # slot with quantifier
       '=sys-devel/gcc:4.8',
+      '>sys-devel/gcc-4.8*',
+      '=sys-devel/gcc-4.8.*',
     ]
 
     valid_atoms.each do |atom|
@@ -83,9 +89,6 @@ describe Puppet::Util::Portage do
       '1.3',
       '0.5.2_pre20120527',
       '3.0_alpha12',
-      '2.2*',
-      '5.1-alpha*',
-      '3.*.0',
     ]
 
     invalid_versions = [
@@ -95,24 +98,38 @@ describe Puppet::Util::Portage do
       'alpha-2.4.1'
     ]
 
-    valid_versions.each do |ver|
+    valid_wildcards = [
+      '2.2*',
+      '5.1_alpha*',
+      '1.2-r1*'
+    ]
+
+    invalid_wildcards = [
+      '2.2.*',
+      '5.1-al*',
+      '3.*.0',
+      '1.2-r*',
+    ]
+
+    (valid_versions + valid_wildcards).each do |ver|
       it "should accept #{ver} as valid" do
         Puppet::Util::Portage.valid_version?(ver).should be_true
       end
     end
 
     describe 'with comparators' do
-      comparators.each do |comp|
-        valid_versions.each do |ver|
-          ver_str = comp + ver
-          it "should accept #{ver_str} as valid" do
-            Puppet::Util::Portage.valid_version?(ver_str).should be_true
-          end
+      version_strings = valid_versions.map { |ver|
+        comparators.map { |comp| comp + ver }
+      }.flatten + valid_wildcards.map { |ver| '=' + ver }
+
+      version_strings.each do |ver|
+        it "should accept #{ver} as valid" do
+          Puppet::Util::Portage.valid_version?(ver).should be_true
         end
       end
     end
 
-    invalid_versions.each do |ver|
+    (invalid_versions + invalid_wildcards).each do |ver|
       it "should reject #{ver} as invalid" do
         Puppet::Util::Portage.valid_version?(ver).should be_false
       end
@@ -267,6 +284,31 @@ describe Puppet::Util::Portage do
           :slot    => '0/7.6.3',
         }
       },
+      {
+        :atom => '=sys-apps/portage-2.2*',
+        :expected => {
+          :package => 'sys-apps/portage',
+          :version => '2.2*',
+          :compare => '=',
+        }
+      },
+      {
+        :atom => 'sys-devel/gcc-4.5*',
+        :expected => {
+          :package => 'sys-devel/gcc',
+          :version => '4.5*',
+          :compare => '',
+        }
+      },
+      {
+        :atom => '=sys-devel/gcc-4.5*:4.5',
+        :expected => {
+          :package => 'sys-devel/gcc',
+          :version => '4.5*',
+          :compare => '=',
+          :slot    => '4.5',
+        }
+      },
     ]
 
     valid_atoms.each do |atom|
@@ -284,10 +326,12 @@ describe Puppet::Util::Portage do
       '!app-accessibility/brltty-4.3.2-r4',
       '<dev-libs/userspace-rcu4.1.2',
       '>=sys-dev/gcc-alpha4.5.1',
-      'sys-devel/gcc-4.5*',
       '>=sys-devel/gcc-r1',
       '<=sys-devel/gcc:4.8',
       '>=app-misc/dummy-0.3:!',
+      'sys-devel/gcc-*',
+      'sys-devel/gcc-4.5.*',
+      '>=sys-devel/gcc-4.5*',
     ]
 
     invalid_atoms.each do |atom|
