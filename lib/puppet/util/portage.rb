@@ -2,6 +2,7 @@ module Puppet::Util::Portage
   # Util methods for Portage types and providers.
   #
   # @see http://dev.gentoo.org/~zmedico/portage/doc/man/ebuild.5.html 'man 5 ebuild section DEPEND'
+  # @see http://dev.gentoo.org/~ulm/pms/head/pms.html 'section 3'
 
   extend self
 
