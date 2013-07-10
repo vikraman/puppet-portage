@@ -98,16 +98,20 @@ All make.conf variables and most of the eselect modules are shown by facter
 
 ## eselect
 
-The eselect type/provider checks for the current state of an eselect module by
-reading the variable of the equivalent fact.
+The eselect type/provider checks for the current state of an eselect module
+(or gcc-config) by reading the currently selected value.
 
     eselect { 'ruby':
       set => 'ruby19',
     }
 
-For eselect modules that have submodules (eg php):
+Some eselect modules have special options or submodules:
 
-    eselect { 'php_apache2':
+    eselect { 'python:python2':
+      set => 'python2.7',
+    }
+
+    eselect { 'php::apache2':
       set => 'php5.3',
     }
 
