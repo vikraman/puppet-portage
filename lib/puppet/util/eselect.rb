@@ -5,7 +5,7 @@ module Puppet::Util::Eselect
   extend self
 
   COMMANDS = {
-    :eselect => '/usr/bin/eselect',
+    :eselect    => '/usr/bin/eselect',
     :gcc_config => '/usr/bin/gcc-config'
   }
 
@@ -18,10 +18,10 @@ module Puppet::Util::Eselect
     modules = {
       'gcc' => {
         :command => :gcc_config,
-        :flags => ['--nocolor'],
-        :param => nil,
-        :get => ['-c'],
-        :set => ['-f'],
+        :flags   => ['--nocolor'],
+        :param   => nil,
+        :get     => ['-c'],
+        :set     => ['-f'],
       },
       'ruby' => {
         :parse => Proc.new { |x| x.split.first.strip },
@@ -30,17 +30,23 @@ module Puppet::Util::Eselect
         :get => ['show', 'system'],
         :set => ['set', 'system'],
       },
-      'python::python2' => {
-        :param => 'python',
-        :get => ['show', '--python2'],
-        :set => ['set',  '--python2'],
-      },
-      'python::python3' => {
-        :param => 'python',
-        :get => ['show', '--python3'],
-        :set => ['set',  '--python3'],
-      },
-    }
+    }.merge(Hash[
+      ['python2','python3'].map { |x|
+        ['python::'+x, {
+          :param => 'python',
+          :get   => ['show', '--'+x],
+          :set   => ['set', '--'+x],
+        }]
+      }]
+    ).merge(Hash[
+      ['cli','apache2','fpm','cgi'].map { |x|
+        ['php::'+x, {
+          :param => 'php',
+          :get   => ['show', x],
+          :set   => ['set', x],
+        }]
+      }]
+    )
     modules.default={}
     default_module(name).merge(modules[name])
   end
