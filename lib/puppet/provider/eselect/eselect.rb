@@ -19,6 +19,13 @@ Puppet::Type.type(:eselect).provide(:eselect) do
     self.class.run_action_on_module(resource[:name], :set, target)
   end
 
+  # Run the action on the module and return the parsed output
+  #
+  # @param [String] name The name of the module
+  # @param [Symbol] action The action to run, `:get` or `:set`
+  # @param [String] args Extra arguments to be passed
+  #
+  # @return [String] The parsed output of the action
   def self.run_action_on_module(name, action, *args)
     mod = Puppet::Util::Eselect.module(name)
     args = mod[:flags] + [mod[:param]] + mod[action] + args

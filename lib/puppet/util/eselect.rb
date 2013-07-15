@@ -9,6 +9,11 @@ module Puppet::Util::Eselect
     :gcc_config => '/usr/bin/gcc-config'
   }
 
+  # Builds a module combining the default and special modules
+  #
+  # @param [String] name The name of the module
+  #
+  # @return [Hash] The module
   def module(name)
     modules = {
       'gcc' => {
@@ -40,6 +45,11 @@ module Puppet::Util::Eselect
     default_module(name).merge(modules[name])
   end
 
+  # Builds a default module
+  #
+  # @param [String] name The name of the module
+  #
+  # @return [Hash] The module
   private
   def default_module(name)
     {
