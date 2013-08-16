@@ -17,6 +17,16 @@ describe Puppet::Type.type(:package_mask).provider(:parsed) do
       line = "app-admin/tree"
       described_class.parse_line(line)[:name].should == "app-admin/tree"
     end
+
+    it "should parse out the package name with version" do
+      line = ">=app-admin/tree-2.0-r1"
+      described_class.parse_line(line)[:name].should == "app-admin/tree"
+    end
+
+    it "should parse out the package name with slot" do
+      line = "app-admin/tree:2"
+      described_class.parse_line(line)[:name].should == "app-admin/tree"
+    end
   end
 
   describe "when flushing" do

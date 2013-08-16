@@ -18,6 +18,16 @@ describe Puppet::Type.type(:package_keywords).provider(:parsed) do
       described_class.parse_line(line)[:name].should == "app-admin/tree"
     end
 
+    it "should parse out the package name with version" do
+      line = ">=app-admin/tree-2.0-r1 ~amd64"
+      described_class.parse_line(line)[:name].should == "app-admin/tree"
+    end
+
+    it "should parse out the package name with slot" do
+      line = "app-admin/tree:2 ~amd64"
+      described_class.parse_line(line)[:name].should == "app-admin/tree"
+    end
+
     it "should not raise an error if no keywords are given for a package" do
       line = "app-admin/tree"
       lambda { described_class.parse_line(line) }.should_not raise_error
