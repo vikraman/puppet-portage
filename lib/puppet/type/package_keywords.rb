@@ -25,6 +25,8 @@ Puppet::Type.newtype(:package_keywords) do
   newproperty(:keywords) do
     desc "The keywords(s) to use"
 
+    defaultto []
+
     validate do |value|
       raise ArgumentError, "Keyword cannot contain whitespace" if value =~ /\s/
     end

@@ -25,6 +25,8 @@ Puppet::Type.newtype(:package_use) do
   newproperty(:use) do
     desc "The flag use flag(s) to apply"
 
+    defaultto []
+
     validate do |value|
       raise ArgumentError, "Use flag cannot contain whitespace" if value =~ /\s/
     end
