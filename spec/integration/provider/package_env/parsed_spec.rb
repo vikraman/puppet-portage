@@ -10,6 +10,21 @@ describe Puppet::Type.type(:package_env).provider(:parsed) do
 
   describe "with a single instance" do
     describe "without a version or slot" do
+      describe "without a keyword" do
+        let(:resources) do
+          r = []
+          r << type_class.new(
+            :name     => 'app-admin/dummy',
+            :target   => path,
+            :provider => :parsed
+          )
+          r
+        end
+
+        it { should have(1).lines }
+        it { should match %r[^app-admin/dummy $] }
+      end
+
       describe "with a single keyword" do
         let(:resources) do
           r = []
@@ -43,6 +58,23 @@ describe Puppet::Type.type(:package_env).provider(:parsed) do
       end
     end
     describe "with a version and slot" do
+      describe "without a keyword" do
+        let(:resources) do
+          r = []
+          r << type_class.new(
+            :name     => 'app-admin/dummy',
+            :target   => path,
+            :version  => '>=2.3.4_alpha1',
+            :slot     => '2',
+            :provider => :parsed
+          )
+          r
+        end
+
+        it { should have(1).lines }
+        it { should match %r[^>=app-admin/dummy-2\.3\.4_alpha1:2 $] }
+      end
+
       describe "with a single keyword" do
         let(:resources) do
           r = []
