@@ -103,7 +103,7 @@ module Puppet::Util::Portage
   #
   # @return [Hash]
   def parse_cmpver(cmpver)
-    regex = Regexp.new("#{COMPARE_PATTERN}?#{VERSION_PATTERN}")
+    regex = Regexp.new("^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$")
     if (match = cmpver.match regex)
       {:compare => match[1] || '=', :version => match[2]}
     else
