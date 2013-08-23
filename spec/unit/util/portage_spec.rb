@@ -342,4 +342,46 @@ describe Puppet::Util::Portage do
       end
     end
   end
+
+  describe "parse_cmpver" do
+    valid_cmpvers = [
+      {
+        :cmpver => '2.3.4-r1',
+        :expected => {
+          :compare => '=',
+          :version => '2.3.4-r1',
+        },
+      },
+      {
+        :cmpver => '>=12995_alpha13',
+        :expected => {
+          :compare => '>=',
+          :version => '12995_alpha13',
+        },
+      },
+    ]
+
+    valid_cmpvers.each do |cmpver|
+      cmpver_str = cmpver[:cmpver]
+      cmpver_hash = cmpver[:expected]
+      it "should parse #{cmpver_str} as #{cmpver_hash}" do
+        Puppet::Util::Portage.parse_cmpver(cmpver_str).should == cmpver_hash
+      end
+    end
+
+    invalid_cmpvers = [
+      '*',
+      '4.5.*',
+      '0.3:!',
+      '0-beta1',
+    ]
+
+    invalid_cmpvers.each do |cmpver|
+      it "should raise an error when parsing #{cmpver}" do
+        expect {
+          Puppet::Util::Portage.parse_cmpver(cmpver)
+        }.to raise_error, Puppet::Util::Portage::AtomError
+      end
+    end
+  end
 end
