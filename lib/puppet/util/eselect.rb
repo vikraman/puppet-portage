@@ -21,6 +21,35 @@ module Puppet::Util::Eselect
   #   * set [Array[String]] The flags to be passed to set the state of the module
   #   * parse [Proc] The function to parse the command output
   def module(name)
+    default_module(name).merge(CUSTOM_MODULES[name])
+  end
+
+  # Builds a default module
+  #
+  # @param [String] name The name of the module
+  #
+  # @return [Hash] The module
+  #
+  # @api private
+  private
+  def default_module(name)
+    {
+      :command => :eselect,
+      :flags => ['--brief', '--color=no'],
+      :param => "#{name}",
+      :get => ['show'],
+      :set => ['set'],
+      :parse => Proc.new { |x| x.strip },
+    }
+  end
+
+  # Builds the custom modules
+  #
+  # @return [Hash<Symbol,Hash>] The custom modules
+  #
+  # @api private
+  private
+  def build_custom_modules
     modules = {
       'gcc' => {
         :command => :gcc_config,
@@ -53,24 +82,9 @@ module Puppet::Util::Eselect
         }]
       }]
     )
-    modules.default={}
-    default_module(name).merge(modules[name])
+    modules.default = {}
+    modules
   end
 
-  # Builds a default module
-  #
-  # @param [String] name The name of the module
-  #
-  # @return [Hash] The module
-  private
-  def default_module(name)
-    {
-      :command => :eselect,
-      :flags => ['--brief', '--color=no'],
-      :param => "#{name}",
-      :get => ['show'],
-      :set => ['set'],
-      :parse => Proc.new { |x| x.strip },
-    }
-  end
+  CUSTOM_MODULES = build_custom_modules()
 end
