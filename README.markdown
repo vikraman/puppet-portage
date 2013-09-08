@@ -46,6 +46,17 @@ keywords can be either a string or an array of strings.
       ensure  => present,
     }
 
+### package\_env
+
+    package_env { 'www-client/firefox':
+      env     => 'no-lto',
+      target  => 'firefox',
+      version => '>=20.0',
+      ensure  => present,
+    }
+
+env can be either a string or an array of strings.
+
 ## make.conf
 
 The default location of make.conf is /etc/portage/make.conf
