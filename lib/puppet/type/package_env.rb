@@ -25,6 +25,8 @@ Puppet::Type.newtype(:package_env) do
   newproperty(:env) do
     desc "The env files to apply"
 
+    defaultto []
+
     def insync?(is)
       is == @should
     end
