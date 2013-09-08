@@ -11,7 +11,7 @@ describe Puppet::Type.type(:package_use) do
 
   describe "when validating attributes" do
     params     = [:name]
-    properties = [:use, :target, :ensure]
+    properties = [:use, :target, :ensure, :version, :slot]
 
     params.each do |param|
       it "should have the #{param} param" do

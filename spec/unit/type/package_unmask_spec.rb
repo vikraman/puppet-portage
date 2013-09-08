@@ -11,7 +11,7 @@ describe Puppet::Type.type(:package_unmask) do
 
   describe "when validating attributes" do
     params     = [:name]
-    properties = [:target, :ensure]
+    properties = [:target, :ensure, :version, :slot]
 
     params.each do |param|
       it "should have the #{param} param" do
