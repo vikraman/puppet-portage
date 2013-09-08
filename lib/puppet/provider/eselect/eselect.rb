@@ -26,6 +26,9 @@ Puppet::Type.type(:eselect).provide(:eselect) do
   # @param [String] args Extra arguments to be passed
   #
   # @return [String] The parsed output of the action
+  # @example Set the default Ruby to be 1.9
+  #   run_action_on_module(ruby', :set, 'ruby19')
+  #   #=> "ruby19"
   def self.run_action_on_module(name, action, *args)
     mod = Puppet::Util::Eselect.module(name)
     args = mod[:flags] + [mod[:param]] + mod[action] + args
