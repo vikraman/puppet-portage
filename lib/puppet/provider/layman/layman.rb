@@ -8,16 +8,11 @@ Puppet::Type.type(:layman).provide(:layman) do
   defaultfor :operatingsystem => :gentoo
 
   def self.instances
-    overlays =
-      run_layman('--list-local').
-      split("\n").map { |x| x.match(/\s+\*\s+(\S+).+/) }.
-      compact.map { |x| x[1] }
     overlays.collect do |name|
-      new(
-        { :name => name,
-          :ensure => :present,
-        }
-      )
+      new({
+        :name   => name,
+        :ensure => :present,
+      })
     end
   end
 
@@ -47,4 +42,14 @@ Puppet::Type.type(:layman).provide(:layman) do
   def self.run_layman(*args)
     layman('--nocolor', '--quiet', args)
   end
+
+  def self.overlays
+    run_layman('--list-local').
+      split("\n").
+      map { |x| x.match(OVERLAY_PATTERN) }.
+      compact.
+      map { |x| x[1] }
+  end
+
+  OVERLAY_PATTERN = '\s+\*\s+(\S+).+'
 end
