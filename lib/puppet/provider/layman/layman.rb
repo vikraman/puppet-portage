@@ -9,7 +9,7 @@ Puppet::Type.type(:layman).provide(:layman) do
 
   def self.instances
     overlays =
-      layman('--nocolor', '--quiet', '--list-local').
+      run_layman('--list-local').
       split("\n").map { |x| x.match(/\s+\*\s+(\S+).+/) }.
       compact.map { |x| x[1] }
     overlays.collect do |name|
@@ -35,12 +35,16 @@ Puppet::Type.type(:layman).provide(:layman) do
   end
 
   def create
-    layman('--quiet', '--add', resource[:name])
+    self.class.run_layman('--add', resource[:name])
     @property_hash[:ensure] = :present
   end
 
   def destroy
-    layman('--quiet', '--delete', resource[:name])
+    self.class.run_layman('--delete', resource[:name])
     @property_hash[:ensure] = :absent
+  end
+
+  def self.run_layman(*args)
+    layman('--nocolor', '--quiet', args)
   end
 end
