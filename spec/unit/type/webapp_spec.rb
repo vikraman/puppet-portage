@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Puppet::Type.type(:webapp) do
 
   describe "when validating attributes" do
-    params = [:name]
-    properties = [:appname, :appversion, :server, :dir, :host, :secure]
+    params = [:name, :server, :user, :group, :soft]
+    properties = [:appname, :appversion, :secure]
 
     params.each do |param|
       it "should have the #{param} param" do
