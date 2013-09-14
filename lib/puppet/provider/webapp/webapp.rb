@@ -25,6 +25,15 @@ Puppet::Type.type(:webapp).provide(:webapp) do
     end
   end
 
+  def self.prefetch(resources)
+    webapps = instances
+    resources.keys.each do |name|
+      if provider = webapps.find { |webapp| webapp.name == name }
+        resources[name].provider = provider
+      end
+    end
+  end
+
   def exists?
     @property_hash[:ensure] == :present
   end
