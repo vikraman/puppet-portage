@@ -1,6 +1,9 @@
 Puppet::Type.newtype(:webapp) do
 
-  ensurable
+  ensurable do
+    defaultvalues
+    defaultto :present
+  end
 
   newparam(:name, :namevar => true) do
     desc "The name of the webapp."
