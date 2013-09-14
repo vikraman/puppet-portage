@@ -6,6 +6,9 @@ Puppet::Type.type(:webapp).provide(:webapp) do
 
   commands :webapp_config => '/usr/sbin/webapp-config'
 
+  confine :operatingsystem => :gentoo
+  defaultfor :operatingsystem => :gentoo
+
   mk_resource_methods
 
   def self.instances
