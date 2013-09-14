@@ -57,18 +57,21 @@ module Puppet::Util::Webapp
   # @param [Hash] Properties of a webapp
   #
   # @return [Array] Options to pass to webapp-config
-  def build_opts(hash)
-    optional_keys = [:host, :dir]
-    bool_keys     = [:secure, :soft]
-
-    opts = []
-    optional_keys.each do |key|
-      hash[key] && opts << '--%s' % key << hash[key]
+  def build_opts(hash, *args)
+    opts = args
+    hash.each do |key, value|
+      case key
+      when :secure, :soft
+        value == :yes && opts << '--%s' % key
+      when :appname, :appversion
+      when :name
+      else
+        opts << '--%s' % key << value
+      end
     end
-    bool_keys.each do |key|
-      hash[key] == :yes && opts << '--%s' % key
-    end
-    opts
+    opts << hash[:appname]
+    opts << hash[:appversion]
+    opts.compact
   end
 
   # Parse a webapp name into host and dir
@@ -78,7 +81,10 @@ module Puppet::Util::Webapp
   # @return [Hash] Parsed host and dir values
   def parse_name(name)
     if (match = name.match(NAME_REGEX))
-      {:host => match[1], :dir => fix_dir(match[2])}
+      {
+        :host => match[1],
+        :dir => fix_dir(match[2])
+      }
     else
       raise WebappError, "#{name} is not a valid webapp name"
     end
@@ -117,6 +123,20 @@ module Puppet::Util::Webapp
     else
       raise WebappError, "#{app} is not a valid app string"
     end
+  end
+
+  # Parse a webapp resource into webapp properties
+  #
+  # @param [Hash] A webapp resource
+  #
+  # @return [Hash] Parsed webapp properties
+  def parse_resource(resource)
+    webapp = parse_name(resource[:name])
+    keys = [:appname, :appversion, :server, :user, :group, :soft, :secure]
+    keys.each do |key|
+      resource[key] && webapp[key] = resource[key]
+    end
+    webapp
   end
 
   # Format webapp properties to a webapp name

@@ -15,7 +15,7 @@ Puppet::Type.type(:webapp).provide(:webapp) do
     webapps = webapp_config('--list-installs').split("\n")
     webapps.collect do |path|
       webapp = Puppet::Util::Webapp::parse_path(path)
-      opts = ['--show-installed'] << Puppet::Util::Webapp::build_opts(webapp)
+      opts = Puppet::Util::Webapp::build_opts(webapp, '--show-installed')
       app = webapp_config(opts)
       new(
         webapp.
@@ -39,18 +39,14 @@ Puppet::Type.type(:webapp).provide(:webapp) do
   end
 
   def create
-    opts = ['--install']
-    webapp = parse_name(resource[:name]).merge({:secure => resource[:secure]})
-    opts << build_opts(webapp)
-    opts << resource[:appname] << resource[:appversion]
+    webapp = parse_resource(resource)
+    opts = build_opts(webapp, '--install')
     webapp_config(opts)
   end
 
   def destroy
-    opts = ['--clean']
-    webapp = parse_name(resource[:name]).merge({:secure => resource[:secure]})
-    opts << build_opts(webapp)
-    opts << resource[:appname] << resource[:appversion]
+    webapp = parse_resource(resource)
+    opts = build_opts(webapp, '--clean')
     webapp_config(opts)
   end
 end
