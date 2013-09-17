@@ -122,6 +122,19 @@ For eselect modules that have submodules (eg php):
       set => 'php5.3',
     }
 
+## webapp
+
+The webapp type/provider can be used to manage webapps via webapp-config.
+
+    webapp { 'www.example.org::/app':
+      appname    => 'django',
+      appversion => '1.4.5',
+      server     => 'nginx',
+      user       => 'nginx',
+      group      => 'nginx',
+      secure     => 'yes',
+    }
+
 See Also
 --------
 
