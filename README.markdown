@@ -139,6 +139,14 @@ The webapp type/provider can be used to manage webapps via webapp-config.
       secure     => 'yes',
     }
 
+## layman
+
+The layman type/provider can be used to manage overlays via layman.
+
+    layman { 'x11':
+      ensure => present,
+    }
+
 See Also
 --------
 
