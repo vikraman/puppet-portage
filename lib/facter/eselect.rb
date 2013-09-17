@@ -19,8 +19,8 @@ if Facter.value(:operatingsystem) == 'Gentoo'
   end
 
   eselect_modules.each do |eselect_module|
-    if eselect_modules_multitarget.keys.include? eselect_module
-      eselect_modules_multitarget[eselect_module].each do |target|
+    if (submodules = eselect_modules_multitarget[eselect_module])
+      submodules.each do |target|
         output = %x{eselect --brief --no-color #{eselect_module} show #{target}}.strip
         facter_add("eselect_#{eselect_module}_#{target}", output)
       end
