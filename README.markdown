@@ -161,3 +161,4 @@ Contributors
   * [Adrien Thebo](https://github.com/adrienthebo)
   * [Theo Chatzimichos](https://github.com/tampakrap)
   * [John-John Tedro](https://github.com/udoprog)
+  * [Vikraman Choudhury](https://github.com/vikraman)
