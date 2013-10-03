@@ -4,7 +4,7 @@ Puppet Gentoo Portage Module
 Provides Gentoo Portage features for Puppet.
 
 Travis Test status: [![Build
-Status](https://travis-ci.org/adrienthebo/puppet-portage.png?branch=master)](https://travis-ci.org/adrienthebo/puppet-portage)
+Status](https://travis-ci.org/gentoo/puppet-portage.png?branch=master)](https://travis-ci.org/gentoo/puppet-portage)
 
 ## /etc/portage/package.\*/\*
 
