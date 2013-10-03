@@ -17,7 +17,7 @@ Status](https://travis-ci.org/gentoo/puppet-portage.png?branch=master)](https://
       ensure  => present,
     }
 
-use can be either a string or an array of strings.
+`use` can be either a string or an array of strings.
 
 ### package\_keywords
 
@@ -28,7 +28,7 @@ use can be either a string or an array of strings.
       ensure   => present,
     }
 
-keywords can be either a string or an array of strings.
+`keywords` can be either a string or an array of strings.
 
 ### package\_unmask
 
@@ -55,18 +55,18 @@ keywords can be either a string or an array of strings.
       ensure  => present,
     }
 
-env can be either a string or an array of strings.
+`env` can be either a string or an array of strings.
 
 ## make.conf
 
-The default location of make.conf is /etc/portage/make.conf
+The default location of `make.conf` is `/etc/portage/make.conf`
 If you want to change it, you should do the following:
 
     class { 'portage':
       make_conf = '/etc/make.conf',
     }
 
-In order to add entries to make.conf:
+In order to add entries to `make.conf`:
 
     portage::makeconf { 'use':
       content => 'flag1 flag2',
@@ -95,22 +95,22 @@ This module provides a wrapper to the native package type:
       ensure           => '3.0.1',
     }
 
-If no {keywords,use,mask,unmask}\_target is specified, then the value of target
+If no `{keywords,use,mask,unmask}\_target` is specified, then the value of `target`
 is being used.  The variables keywords, mask and unmask also accept the special
-value 'all', that will create versionless entries.  (This applies only to
+value `all`, that will create versionless entries. (This applies only to
 portage::package, if you want versionless entries in any of the above
-package\_\* types, you can just omit the version attribute.) Any change in
-portage::package will also trigger the appropriate re-emerge to the affected
+`package\_\*` types, you can just omit the version attribute.) Any change in
+`portage::package` will also trigger the appropriate re-emerge to the affected
 package.
 
 ## facts
 
-All make.conf variables and most of the eselect modules are shown by facter
+All `make.conf` variables and most of the `eselect` modules are shown by `facter`
 
 ## eselect
 
-The eselect type/provider checks for the current state of an eselect module
-(or gcc-config) by reading the currently selected value.
+The `eselect` type/provider checks for the current state of an `eselect` module
+(or `gcc-config`) by reading the currently selected value.
 
     eselect { 'ruby':
       set => 'ruby19',
@@ -128,7 +128,7 @@ Some eselect modules have special options or submodules:
 
 ## webapp
 
-The webapp type/provider can be used to manage webapps via webapp-config.
+The `webapp` type/provider can be used to manage webapps via `webapp-config`.
 
     webapp { 'www.example.org::/app':
       appname    => 'django',
@@ -141,7 +141,7 @@ The webapp type/provider can be used to manage webapps via webapp-config.
 
 ## layman
 
-The layman type/provider can be used to manage overlays via layman.
+The `layman` type/provider can be used to manage overlays via `layman`.
 
     layman { 'x11':
       ensure => present,
