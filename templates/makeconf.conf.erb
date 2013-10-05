@@ -1,5 +1,5 @@
 <% if content == '' -%>
 <%= name %>
 <% else -%>
-<%= name.upcase %>="<%= content %>"
+<%= name.upcase %>="<%= [content].flatten.join(' ') %>"
 <% end -%>
