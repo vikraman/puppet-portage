@@ -118,7 +118,7 @@ The `eselect` type/provider checks for the current state of an `eselect` module
 
 Some eselect modules have special options or submodules:
 
-    eselect { 'python:python2':
+    eselect { 'python::python2':
       set => 'python2.7',
     }
 
