@@ -36,7 +36,7 @@ Puppet::Type.newtype(:package_env) do
         if @should == [:absent]
           return :absent
         else
-          return @should
+          return @should.flatten
         end
       else
         return nil
