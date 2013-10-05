@@ -32,7 +32,7 @@ Puppet::Type.newtype(:package_keywords) do
     end
 
     def insync?(is)
-      is == @should
+      is == should
     end
 
     def should

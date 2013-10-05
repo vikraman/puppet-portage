@@ -28,7 +28,7 @@ Puppet::Type.newtype(:package_env) do
     defaultto []
 
     def insync?(is)
-      is == @should
+      is == should
     end
 
     def should
