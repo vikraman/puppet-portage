@@ -68,16 +68,20 @@ If you want to change it, you should do the following:
 
 In order to add entries to `make.conf`:
 
-    portage::makeconf { 'use':
-      content => 'flag1 flag2',
-      ensure  => present,
-    }
     portage::makeconf { 'portdir_overlay':
       content => '/var/lib/layman',
       ensure  => present,
     }
+    portage::makeconf { 'use':
+      content => ['flag1', 'flag2'],
+      ensure  => present,
+    }
 
 Changes in the USE variable will also trigger re-emerge of the affected packages.
+
+You can also specify special content:
+
+    portage::makeconf { 'source /var/lib/layman/make.conf': }
 
 ## portage::package
 
