@@ -86,22 +86,22 @@
 #  * `puppet describe package_unmask`
 #
 define portage::package (
-    $ensure           = undef,
-    $use              = undef,
-    $use_version      = undef,
-    $use_slot         = undef,
-    $keywords         = undef,
-    $keywords_version = undef,
-    $keywords_slot    = undef,
-    $mask_version     = undef,
-    $mask_slot        = undef,
-    $unmask_version   = undef,
-    $unmask_slot      = undef,
-    $target           = undef,
-    $use_target       = undef,
-    $keywords_target  = undef,
-    $mask_target      = undef,
-    $unmask_target    = undef,
+  $ensure           = undef,
+  $use              = undef,
+  $use_version      = undef,
+  $use_slot         = undef,
+  $keywords         = undef,
+  $keywords_version = undef,
+  $keywords_slot    = undef,
+  $mask_version     = undef,
+  $mask_slot        = undef,
+  $unmask_version   = undef,
+  $unmask_slot      = undef,
+  $target           = undef,
+  $use_target       = undef,
+  $keywords_target  = undef,
+  $mask_target      = undef,
+  $unmask_target    = undef,
 ) {
 
   if $use_target {
@@ -197,4 +197,5 @@ define portage::package (
   package { $name:
     ensure => $ensure,
   }
+
 }
