@@ -132,6 +132,23 @@ define portage::package (
     $assigned_unmask_target = $target
   }
 
+  if $use {
+    package_use { $name:
+      use     => $use,
+      version => $use_version,
+      slot    => $use_slot,
+      target  => $assigned_use_target,
+      notify  => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
+  else {
+    package_use { $name:
+      target => $assigned_use_target,
+      ensure => absent,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
+
   if $keywords or $keywords_version {
     if $keywords == 'all' {
       $assigned_keywords = undef
@@ -147,19 +164,11 @@ define portage::package (
       notify   => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
-
-  if $unmask_version or $unmask_slot {
-    if $unmask_version == 'all' {
-      $assigned_unmask_version = undef
-    }
-    else {
-      $assigned_unmask_version = $unmask_version
-    }
-    package_unmask { $name:
-      version => $assigned_unmask_version,
-      slot    => $unmask_slot,
-      target  => $assigned_unmask_target,
-      notify  => [Exec["rebuild_${name}"], Package[$name]],
+  else {
+    package_keywords { $name:
+      target => $assigned_keywords_target,
+      ensure => absent,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
@@ -177,14 +186,33 @@ define portage::package (
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
+  else {
+    package_mask { $name:
+      target => $assigned_mask_target,
+      ensure => absent,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
 
-  if $use {
-    package_use { $name:
-      use     => $use,
-      version => $use_version,
-      slot    => $use_slot,
-      target  => $assigned_use_target,
+  if $unmask_version or $unmask_slot {
+    if $unmask_version == 'all' {
+      $assigned_unmask_version = undef
+    }
+    else {
+      $assigned_unmask_version = $unmask_version
+    }
+    package_unmask { $name:
+      version => $assigned_unmask_version,
+      slot    => $unmask_slot,
+      target  => $assigned_unmask_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
+  else {
+    package_unmask { $name:
+      target => $assigned_unmask_target,
+      ensure => absent,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
