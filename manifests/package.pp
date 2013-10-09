@@ -86,22 +86,22 @@
 #  * `puppet describe package_unmask`
 #
 define portage::package (
-    $ensure           = undef,
-    $use              = undef,
-    $use_version      = undef,
-    $use_slot         = undef,
-    $keywords         = undef,
-    $keywords_version = undef,
-    $keywords_slot    = undef,
-    $mask_version     = undef,
-    $mask_slot        = undef,
-    $unmask_version   = undef,
-    $unmask_slot      = undef,
-    $target           = undef,
-    $use_target       = undef,
-    $keywords_target  = undef,
-    $mask_target      = undef,
-    $unmask_target    = undef,
+  $ensure           = undef,
+  $use              = undef,
+  $use_version      = undef,
+  $use_slot         = undef,
+  $keywords         = undef,
+  $keywords_version = undef,
+  $keywords_slot    = undef,
+  $mask_version     = undef,
+  $mask_slot        = undef,
+  $unmask_version   = undef,
+  $unmask_slot      = undef,
+  $target           = undef,
+  $use_target       = undef,
+  $keywords_target  = undef,
+  $mask_target      = undef,
+  $unmask_target    = undef,
 ) {
 
   if $use_target {
@@ -132,6 +132,23 @@ define portage::package (
     $assigned_unmask_target = $target
   }
 
+  if $use {
+    package_use { $name:
+      use     => $use,
+      version => $use_version,
+      slot    => $use_slot,
+      target  => $assigned_use_target,
+      notify  => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
+  else {
+    package_use { $name:
+      ensure => absent,
+      target => $assigned_use_target,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
+
   if $keywords or $keywords_version {
     if $keywords == 'all' {
       $assigned_keywords = undef
@@ -147,19 +164,11 @@ define portage::package (
       notify   => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
-
-  if $unmask_version or $unmask_slot {
-    if $unmask_version == 'all' {
-      $assigned_unmask_version = undef
-    }
-    else {
-      $assigned_unmask_version = $unmask_version
-    }
-    package_unmask { $name:
-      version => $assigned_unmask_version,
-      slot    => $unmask_slot,
-      target  => $assigned_unmask_target,
-      notify  => [Exec["rebuild_${name}"], Package[$name]],
+  else {
+    package_keywords { $name:
+      ensure => absent,
+      target => $assigned_keywords_target,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
@@ -177,14 +186,33 @@ define portage::package (
       notify  => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
+  else {
+    package_mask { $name:
+      ensure => absent,
+      target => $assigned_mask_target,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
 
-  if $use {
-    package_use { $name:
-      use     => $use,
-      version => $use_version,
-      slot    => $use_slot,
-      target  => $assigned_use_target,
+  if $unmask_version or $unmask_slot {
+    if $unmask_version == 'all' {
+      $assigned_unmask_version = undef
+    }
+    else {
+      $assigned_unmask_version = $unmask_version
+    }
+    package_unmask { $name:
+      version => $assigned_unmask_version,
+      slot    => $unmask_slot,
+      target  => $assigned_unmask_target,
       notify  => [Exec["rebuild_${name}"], Package[$name]],
+    }
+  }
+  else {
+    package_unmask { $name:
+      ensure => absent,
+      target => $assigned_unmask_target,
+      notify => [Exec["rebuild_${name}"], Package[$name]],
     }
   }
 
@@ -197,4 +225,5 @@ define portage::package (
   package { $name:
     ensure => $ensure,
   }
+
 }

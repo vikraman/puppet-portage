@@ -31,35 +31,25 @@
 # == See Also
 #
 # * portage-utils: http://www.gentoo.org/doc/en/portage-utils.xml
-define portage::postsync(
+define portage::postsync (
   $ensure  = 'present',
   $content = undef,
   $source  = undef,
 ) {
 
-  include portage
+  include '::portage'
 
-  if ($content and $source) or !($content and $source) {
-    fail('One of [$content, $source] must be specified')
+  if ($content and $source) or (!$content and !$source) {
+    fail('One (and only one) of [$content, $source] must be specified')
   }
 
-  if $content {
-    file { "portage_postsync_${name}":
-      ensure  => $ensure,
-      path    => "/etc/portage/postsync.d/${name}",
-      content => $content,
-      mode    => '0755',
-      require => File['/etc/portage/postsync.d'],
-    }
+  file { "/etc/portage/postsync.d/${name}":
+    ensure  => $ensure,
+    content => $content,
+    source  => $source,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
   }
 
-  if $source {
-    file { "portage_postsync_${name}":
-      ensure  => $ensure,
-      path    => "/etc/portage/postsync.d/${name}",
-      source  => $source,
-      mode    => '0755',
-      require => File['/etc/portage/postsync.d'],
-    }
-  }
 }

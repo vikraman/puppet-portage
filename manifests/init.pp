@@ -28,17 +28,14 @@ class portage (
 
   include concat::setup
 
-  file {
-    '/etc/portage/package.keywords':
-      ensure  => directory;
-    '/etc/portage/package.mask':
-      ensure  => directory;
-    '/etc/portage/package.unmask':
-      ensure  => directory;
-    '/etc/portage/package.use':
-      ensure  => directory;
-    '/etc/portage/postsync.d':
-      ensure  => directory;
+  file { [
+    '/etc/portage/package.keywords',
+    '/etc/portage/package.mask',
+    '/etc/portage/package.unmask',
+    '/etc/portage/package.use',
+    '/etc/portage/postsync.d',
+  ]:
+    ensure => directory;
   }
 
   exec { 'changed_makeconf_use':
@@ -48,9 +45,9 @@ class portage (
   }
 
   concat { $make_conf:
-    owner  => root,
-    group  => root,
-    mode   => 644,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
     notify => Exec['changed_makeconf_use'],
   }
 
@@ -59,4 +56,5 @@ class portage (
     content => template('portage/makeconf.header.conf.erb'),
     order   => 00,
   }
+
 }
