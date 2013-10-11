@@ -104,6 +104,12 @@ define portage::package (
   $unmask_target    = undef,
 ) {
 
+  $atom = $ensure ? {
+    /(present|absent|purged|held|installed|latest)/ => $name,
+    /./ => "=${name}-${ensure}",
+    default => $name,
+  }
+
   if $use_target {
     $assigned_use_target = $use_target
   }
@@ -138,14 +144,14 @@ define portage::package (
       version => $use_version,
       slot    => $use_slot,
       target  => $assigned_use_target,
-      notify  => [Exec["rebuild_${name}"], Package[$name]],
+      notify  => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
   else {
     package_use { $name:
       ensure => absent,
       target => $assigned_use_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      notify => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
 
@@ -161,14 +167,14 @@ define portage::package (
       version  => $keywords_version,
       slot     => $keywords_slot,
       target   => $assigned_keywords_target,
-      notify   => [Exec["rebuild_${name}"], Package[$name]],
+      notify   => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
   else {
     package_keywords { $name:
       ensure => absent,
       target => $assigned_keywords_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      notify => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
 
@@ -183,14 +189,14 @@ define portage::package (
       version => $assigned_mask_version,
       slot    => $mask_slot,
       target  => $assigned_mask_target,
-      notify  => [Exec["rebuild_${name}"], Package[$name]],
+      notify  => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
   else {
     package_mask { $name:
       ensure => absent,
       target => $assigned_mask_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      notify => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
 
@@ -205,19 +211,19 @@ define portage::package (
       version => $assigned_unmask_version,
       slot    => $unmask_slot,
       target  => $assigned_unmask_target,
-      notify  => [Exec["rebuild_${name}"], Package[$name]],
+      notify  => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
   else {
     package_unmask { $name:
       ensure => absent,
       target => $assigned_unmask_target,
-      notify => [Exec["rebuild_${name}"], Package[$name]],
+      notify => [Exec["rebuild_${atom}"], Package[$name]],
     }
   }
 
-  exec { "rebuild_${name}":
-    command     => "/usr/bin/emerge --changed-use -u1 ${name}",
+  exec { "rebuild_${atom}":
+    command     => "/usr/bin/emerge --changed-use -u1 ${atom}",
     refreshonly => true,
     timeout     => 43200,
   }
