@@ -57,4 +57,14 @@ describe Puppet::Type.type(:package_use) do
       described_class.new(:name => "sys-devel/gcc", :target => "/tmp/gcc").should(:target).should == "/tmp/gcc"
     end
   end
+
+  describe "when validating the use property" do
+    it "should default to an empty list" do
+      described_class.new(:name => "sys-devel/gcc").should(:use).should == []
+    end
+
+    it "should properly handle nested arrays" do
+      described_class.new(:name => "sys-devel/gcc", :use => ["foo",["bar"]]).property(:use).insync?(["foo","bar"]).should be_true
+    end
+  end
 end
