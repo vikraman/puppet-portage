@@ -1,4 +1,4 @@
-require 'puppet/util/eselect'
+require_relative '../../util/eselect'
 
 Puppet::Type.type(:eselect).provide(:eselect) do
 

@@ -1,4 +1,4 @@
-require 'puppet/util/portage'
+require_relative '../util/portage'
 require 'puppet/property'
 
 class Puppet::Property::PortageVersion < Puppet::Property

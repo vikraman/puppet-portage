@@ -1,5 +1,5 @@
-require 'puppet/provider/portagefile'
-require 'puppet/util/portage'
+require_relative '../portagefile'
+require_relative '../../util/portage'
 
 Puppet::Type.type(:package_unmask).provide(:parsed,
   :parent => Puppet::Provider::PortageFile,

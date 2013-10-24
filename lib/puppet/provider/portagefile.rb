@@ -1,6 +1,6 @@
 # Common base class for gentoo package_* providers. It aggregates some of the
 # boilerplate that's shared between the providers.
-require 'puppet/util/portage'
+require_relative '../util/portage'
 require 'puppet/provider/parsedfile'
 class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
 

@@ -1,4 +1,4 @@
-require 'puppet/util/portage'
+require_relative '../util/portage'
 require 'puppet/parameter'
 
 class Puppet::Parameter::PortageName < Puppet::Parameter

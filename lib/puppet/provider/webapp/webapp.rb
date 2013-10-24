@@ -1,4 +1,4 @@
-require 'puppet/util/webapp'
+require_relative '../../util/webapp'
 
 Puppet::Type.type(:webapp).provide(:webapp) do
 
