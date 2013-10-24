@@ -5,13 +5,13 @@ module Puppet::Util::Webapp
 
   extend self
 
-  NAME_PATTERN = '(\S+)::(\/?\S*)'
-  PATH_PATTERN = '\S*\/(\S+)\/htdocs(-secure)?(\/\S*)?'
-  APP_PATTERN  = '(\S+)\s(\S+)'
+  NAME_PATTERN = '(\S+)::(\/?\S*)' unless const_defined?(:NAME_PATTERN)
+  PATH_PATTERN = '\S*\/(\S+)\/htdocs(-secure)?(\/\S*)?' unless const_defined?(:PATH_PATTERN)
+  APP_PATTERN  = '(\S+)\s(\S+)' unless const_defined?(:APP_PATTERN)
 
-  NAME_REGEX = Regexp.new "^#{NAME_PATTERN}$"
-  PATH_REGEX = Regexp.new "^#{PATH_PATTERN}$"
-  APP_REGEX  = Regexp.new "^#{APP_PATTERN}$"
+  NAME_REGEX = Regexp.new "^#{NAME_PATTERN}$" unless const_defined?(:NAME_REGEX)
+  PATH_REGEX = Regexp.new "^#{PATH_PATTERN}$" unless const_defined?(:PATH_REGEX)
+  APP_REGEX  = Regexp.new "^#{APP_PATTERN}$" unless const_defined?(:APP_REGEX)
 
   # Determine if a string is a valid webapp name
   #

@@ -6,21 +6,21 @@ module Puppet::Util::Portage
 
   extend self
 
-  CATEGORY_PATTERN = '[\w+][\w+.-]*'
-  NAME_PATTERN     = '[\w+][\w+-]*?'
-  PACKAGE_PATTERN  = "(#{CATEGORY_PATTERN}/#{NAME_PATTERN})"
-  COMPARE_PATTERN  = '([<>=~]|[<>]=)'
-  VERSION_PATTERN  = '((?:cvs\.)?(?:\d+)(?:(?:\.\d+)*)(?:[a-z]?)(?:(?:_(?:pre|p|beta|alpha|rc)\d*)*)(?:-r(?:\d+))?)'
-  WILDCARD_PATTERN = "(#{VERSION_PATTERN}\\*)"
-  SLOT_PATTERN     = '([\w+./*=-]+)'
+  CATEGORY_PATTERN = '[\w+][\w+.-]*' unless const_defined?(:CATEGORY_PATTERN)
+  NAME_PATTERN     = '[\w+][\w+-]*?' unless const_defined?(:NAME_PATTERN)
+  PACKAGE_PATTERN  = "(#{CATEGORY_PATTERN}/#{NAME_PATTERN})" unless const_defined?(:PACKAGE_PATTERN)
+  COMPARE_PATTERN  = '([<>=~]|[<>]=)' unless const_defined?(:COMPARE_PATTERN)
+  VERSION_PATTERN  = '((?:cvs\.)?(?:\d+)(?:(?:\.\d+)*)(?:[a-z]?)(?:(?:_(?:pre|p|beta|alpha|rc)\d*)*)(?:-r(?:\d+))?)' unless const_defined?(:VERSION_PATTERN)
+  WILDCARD_PATTERN = "(#{VERSION_PATTERN}\\*)" unless const_defined?(:WILDCARD_PATTERN)
+  SLOT_PATTERN     = '([\w+./*=-]+)' unless const_defined?(:SLOT_PATTERN)
 
-  BASE_ATOM_REGEX              = Regexp.new "^#{PACKAGE_PATTERN}$"
-  VERSIONED_ATOM_REGEX         = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$"
-  SLOTTED_ATOM_REGEX           = Regexp.new "^#{PACKAGE_PATTERN}:#{SLOT_PATTERN}$"
-  VERSIONED_SLOTTED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}:#{SLOT_PATTERN}$"
-  WILDCARD_ATOM_REGEX          = Regexp.new "^(=?)#{PACKAGE_PATTERN}-#{WILDCARD_PATTERN}$"
-  WILDCARD_SLOTTED_ATOM_REGEX  = Regexp.new "^(=?)#{PACKAGE_PATTERN}-#{WILDCARD_PATTERN}:#{SLOT_PATTERN}$"
-  DEPEND_ATOM_REGEX            = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX, SLOTTED_ATOM_REGEX, VERSIONED_SLOTTED_ATOM_REGEX, WILDCARD_ATOM_REGEX, WILDCARD_SLOTTED_ATOM_REGEX
+  BASE_ATOM_REGEX              = Regexp.new "^#{PACKAGE_PATTERN}$" unless const_defined?(:BASE_ATOM_REGEX)
+  VERSIONED_ATOM_REGEX         = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}$" unless const_defined?(:VERSIONED_ATOM_REGEX)
+  SLOTTED_ATOM_REGEX           = Regexp.new "^#{PACKAGE_PATTERN}:#{SLOT_PATTERN}$" unless const_defined?(:SLOTTED_ATOM_REGEX)
+  VERSIONED_SLOTTED_ATOM_REGEX = Regexp.new "^#{COMPARE_PATTERN}#{PACKAGE_PATTERN}-#{VERSION_PATTERN}:#{SLOT_PATTERN}$" unless const_defined?(:VERSIONED_SLOTTED_ATOM_REGEX)
+  WILDCARD_ATOM_REGEX          = Regexp.new "^(=?)#{PACKAGE_PATTERN}-#{WILDCARD_PATTERN}$" unless const_defined?(:WILDCARD_ATOM_REGEX)
+  WILDCARD_SLOTTED_ATOM_REGEX  = Regexp.new "^(=?)#{PACKAGE_PATTERN}-#{WILDCARD_PATTERN}:#{SLOT_PATTERN}$" unless const_defined?(:WILDCARD_SLOTTED_ATOM_REGEX)
+  DEPEND_ATOM_REGEX            = Regexp.union BASE_ATOM_REGEX, VERSIONED_ATOM_REGEX, SLOTTED_ATOM_REGEX, VERSIONED_SLOTTED_ATOM_REGEX, WILDCARD_ATOM_REGEX, WILDCARD_SLOTTED_ATOM_REGEX unless const_defined?(:DEPEND_ATOM_REGEX)
 
   # Determine if a string is a valid DEPEND atom
   #

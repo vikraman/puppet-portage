@@ -7,7 +7,7 @@ module Puppet::Util::Eselect
   COMMANDS = {
     :eselect    => '/usr/bin/eselect',
     :gcc_config => '/usr/bin/gcc-config'
-  }
+  } unless const_defined?(:COMMANDS)
 
   # Builds a module combining the default and special modules
   #
@@ -86,5 +86,5 @@ module Puppet::Util::Eselect
     modules
   end
 
-  CUSTOM_MODULES = build_custom_modules()
+  CUSTOM_MODULES = build_custom_modules() unless const_defined?(:CUSTOM_MODULES)
 end
