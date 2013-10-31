@@ -1,5 +1,6 @@
 # Common base class for gentoo package_* providers. It aggregates some of the
 # boilerplate that's shared between the providers.
+File.expand_path('..', File.dirname(__FILE__)).tap { |dir| $:.unshift(dir) unless $:.include?(dir) }
 require 'puppet/util/portage'
 require 'puppet/provider/parsedfile'
 class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile

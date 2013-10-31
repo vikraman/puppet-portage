@@ -1,3 +1,4 @@
+File.expand_path('../..', File.dirname(__FILE__)).tap { |dir| $:.unshift(dir) unless $:.include?(dir) }
 require 'puppet/util/webapp'
 
 Puppet::Type.type(:webapp).provide(:webapp) do
