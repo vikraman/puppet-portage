@@ -151,6 +151,19 @@ The `layman` type/provider can be used to manage overlays via `layman`.
       ensure => present,
     }
 
+## Installation of Gentoo tools
+
+This module can also handle the installation of various Gentoo tools.
+
+    class { 'portage':
+      portage_ensure => '2.2.6',
+      eix_ensure     => '0.29.4',
+      eix_keywords   => ['~amd64', '~x86'],
+    }
+
+See `manifests/init.pp` for all the available tools that can be defined.
+(It is recommended to use hiera in order to define the values)
+
 See Also
 --------
 
