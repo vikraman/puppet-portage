@@ -1,3 +1,4 @@
+File.expand_path('../..', File.dirname(__FILE__)).tap { |dir| $:.unshift(dir) unless $:.include?(dir) }
 require 'puppet/provider/portagefile'
 require 'puppet/util/portage'
 

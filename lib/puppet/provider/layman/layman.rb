@@ -51,5 +51,5 @@ Puppet::Type.type(:layman).provide(:layman) do
       map { |x| x[1] }
   end
 
-  OVERLAY_PATTERN = '\s+\*\s+(\S+).+'
+  OVERLAY_PATTERN = '\s+\*\s+(\S+).+' unless const_defined?(:OVERLAY_PATTERN)
 end
