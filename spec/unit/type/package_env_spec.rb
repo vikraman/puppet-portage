@@ -53,4 +53,14 @@ describe Puppet::Type.type(:package_env) do
       described_class.new(:name => "www-client/firefox", :target => "/tmp/firefox").should(:target).should == "/tmp/firefox"
     end
   end
+
+  describe "when validating the env property" do
+    it "should default to an empty list" do
+      described_class.new(:name => "sys-devel/gcc").should(:env).should == []
+    end
+
+    it "should properly handle nested arrays" do
+      described_class.new(:name => "sys-devel/gcc", :env => ["foo",["bar"]]).property(:env).insync?(["foo","bar"]).should be_true
+    end
+  end
 end

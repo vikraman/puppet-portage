@@ -32,7 +32,7 @@ Puppet::Type.newtype(:package_keywords) do
     end
 
     def insync?(is)
-      is == @should
+      is == should
     end
 
     def should
@@ -40,7 +40,7 @@ Puppet::Type.newtype(:package_keywords) do
         if @should == [:absent]
           return :absent
         else
-          return @should
+          return @should.flatten
         end
       else
         return nil

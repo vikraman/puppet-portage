@@ -57,4 +57,14 @@ describe Puppet::Type.type(:package_keywords) do
       described_class.new(:name => "sys-devel/gcc", :target => "/tmp/gcc").should(:target).should == "/tmp/gcc"
     end
   end
+
+  describe "when validating the keywords property" do
+    it "should default to an empty list" do
+      described_class.new(:name => "sys-devel/gcc").should(:keywords).should == []
+    end
+
+    it "should properly handle nested arrays" do
+      described_class.new(:name => "sys-devel/gcc", :keywords => ["foo",["bar"]]).property(:keywords).insync?(["foo","bar"]).should be_true
+    end
+  end
 end
