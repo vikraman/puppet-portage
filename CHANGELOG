@@ -1,6 +1,38 @@
 CHANGELOG
 =========
 
+2.1.0
+-----
+
+2013-11-01
+
+This is a backwards incompatible feature and bugfix relase.
+It contains the work from GSoC 2013 by Vikraman Choudhury.
+
+### User notes:
+
+  * #75 Support for package slots
+  * #78 Better eselect provider
+  * #81 Type and provider for package.env
+  * #85 Type and provider for layman
+  * #86 Use '=' when compare pattern is missing
+  * #90 Type and provider for webapp-config
+  * #98 Handle package version when a rebuild is triggered
+  * #100 Handle nested attribute arrays
+  * #102 Updates in portage::makeconf
+  * #115 Add support for installation of Gentoo base and other tools
+
+### Developer notes:
+
+  * #76 Use correct regexes from portage
+  * #82 Update tests with :version and :slot
+  * #84 Set defaults for package_* types
+  * #104 Fix postsync, enhance package definition and cosmetic code cleanups
+  * #111 Use @ prefix for variables in erb templates to fix deprecated syntax
+  * #112 Update Modulefile with the new location in github and forge
+  * #113 Modify $LOAD_PATH to fix require errors
+
+
 2.0.1
 -----
 
