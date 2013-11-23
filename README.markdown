@@ -92,8 +92,8 @@ This module provides a wrapper to the native package type:
       use_version      => '>=3.0.1',
       keywords         => ['~amd64', '~x86'],
       keywords_version => '>=3.0.1',
-      mask             => '<=2.3.17',
-      unmask           => '>=3.0.1',
+      mask_version     => '<=2.3.17',
+      unmask_version   => '>=3.0.1',
       target           => 'puppet',
       keywords_target  => 'puppet-keywords',
       ensure           => '3.0.1',
@@ -179,3 +179,4 @@ Contributors
   * [Theo Chatzimichos](https://github.com/tampakrap)
   * [John-John Tedro](https://github.com/udoprog)
   * [Vikraman Choudhury](https://github.com/vikraman)
+  * [Matthias Saou](https://github.com/thias)
