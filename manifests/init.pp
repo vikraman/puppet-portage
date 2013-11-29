@@ -56,9 +56,10 @@ class portage (
   }
 
   exec { 'changed_makeconf_use':
-    command     => '/usr/bin/emerge --changed-use @world',
+    command     => 'emerge -1 --changed-use $(qlist -vIC | sed \'s/^/=/\')',
     refreshonly => true,
     timeout     => 43200,
+    provider    => shell,
   }
 
   concat { $make_conf:
