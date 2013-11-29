@@ -24,4 +24,7 @@ class portage::params {
   $eselect_ensure         = undef
   $eselect_keywords       = undef
   $eselect_use            = undef
+  $portage_utils_ensure   = undef
+  $portage_utils_keywords = undef
+  $portage_utils_use      = undef
 }

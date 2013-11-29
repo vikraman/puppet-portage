@@ -56,4 +56,13 @@ class portage::install {
     }
   }
 
+  if $portage::portage_utils_ensure {
+    portage::package { 'app-portage/portage-utils':
+      ensure   => $portage::portage_utils_ensure,
+      keywords => $portage::portage_utils_keywords,
+      use      => $portage::portage_utils_use,
+      target   => 'portage',
+    }
+  }
+
 }

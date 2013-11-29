@@ -40,6 +40,9 @@ class portage (
   $eselect_ensure         = $portage::params::eselect_ensure,
   $eselect_keywords       = $portage::params::eselect_keywords,
   $eselect_use            = $portage::params::eselect_use,
+  $portage_utils_ensure   = $portage::params::portage_utils_ensure,
+  $portage_utils_keywords = $portage::params::portage_utils_keywords,
+  $portage_utils_use      = $portage::params::portage_utils_use,
 ) inherits portage::params {
 
   include concat::setup
