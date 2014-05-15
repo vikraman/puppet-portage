@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+2.2.0
+-----
+
+2014-05-15
+
+This is a backwards compatible bugfix release.
+
+  * Fix command executed on changed make.conf
+  * Allow installing portage-utils using class portage
+  * Ensure dependent packages are installed by default
+  * Change eselect --no-color option to --color=no
+  * Allow newer concat versions
+  * Set correct path for exec resources
+
+
 2.1.0
 -----
 
