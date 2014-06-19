@@ -38,10 +38,11 @@ Puppet::Type.newtype(:package_use) do
 
     def should
       if defined? @should
-        if @should == [:absent]
+        flattened = @should.flatten
+        if flattened == [:absent]
           return :absent
         else
-          return @should.flatten
+          return flattened.select { |s| !s.empty? }
         end
       else
         return nil
