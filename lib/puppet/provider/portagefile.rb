@@ -61,9 +61,7 @@ class Puppet::Provider::PortageFile < Puppet::Provider::ParsedFile
       end
 
       attr_array = match[2].split(/\s+/)
-      unless attr_array.empty?
-        hash[attribute] = attr_array
-      end
+      hash[attribute] = attr_array
 
     elsif (match = line.match /^(\S+)\s*/)
       # just a package
