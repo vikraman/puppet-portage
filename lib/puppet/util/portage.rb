@@ -104,9 +104,12 @@ module Puppet::Util::Portage
   #
   # @return [Hash]
   def parse_cmpver(cmpver)
-    regex = Regexp.new("^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$")
-    if (match = cmpver.match regex)
+    version_regex = Regexp.new "^#{COMPARE_PATTERN}?#{VERSION_PATTERN}$"
+    wildcard_regex = Regexp.new "^(=?)#{WILDCARD_PATTERN}$"
+    if (match = cmpver.match version_regex)
       {:compare => match[1] || '=', :version => match[2]}
+    elsif (match = cmpver.match wildcard_regex)
+      {:compare => match[1], :version => match[2]}
     else
       raise AtomError, "#{cmpver} is not a valid compare version"
     end

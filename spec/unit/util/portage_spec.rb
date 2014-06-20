@@ -359,6 +359,13 @@ describe Puppet::Util::Portage do
           :version => '12995_alpha13',
         },
       },
+      {
+        :cmpver => '=0.30*',
+        :expected => {
+          :compare => '=',
+          :version => '0.30*',
+        },
+      },
     ]
 
     valid_cmpvers.each do |cmpver|
