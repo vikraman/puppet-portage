@@ -28,7 +28,6 @@ define portage::makeconf(
   $ensure = present,
   $content = '',
 ) {
-  include concat::setup
   include portage
 
   concat::fragment { $name:
