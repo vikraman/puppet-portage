@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_range": ">= 1.0.2"
+      "version_range": "1.x"
     }
   ]
 }
