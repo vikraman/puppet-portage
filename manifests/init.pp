@@ -45,7 +45,6 @@ class portage (
   $portage_utils_use      = $portage::params::portage_utils_use,
 ) inherits portage::params {
 
-  include concat::setup
   include portage::install
 
   file { [
@@ -77,7 +76,7 @@ class portage (
   concat::fragment { 'makeconf_header':
     target  => $make_conf,
     content => template('portage/makeconf.header.conf.erb'),
-    order   => 00,
+    order   => '00'
   }
 
 }
