@@ -30,7 +30,12 @@ Puppet::Type.type(:layman).provide(:layman) do
   end
 
   def create
-    self.class.run_layman('--add', resource[:name])
+    layman_args = []
+    if resource[:overlay_list]
+      layman_args.push('-o',resource[:overlay_list])
+    end
+    layman_args.push('--add', resource[:name])
+    self.class.run_layman(layman_args)
     @property_hash[:ensure] = :present
   end
 
