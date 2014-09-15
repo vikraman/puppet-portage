@@ -8,6 +8,7 @@
 #
 class portage::params {
   $make_conf              = '/etc/portage/make.conf'
+  $make_conf_remerge      = true
   $portage_ensure         = installed
   $portage_keywords       = undef
   $portage_use            = undef

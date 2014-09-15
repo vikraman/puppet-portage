@@ -24,6 +24,7 @@
 
 class portage (
   $make_conf              = $portage::params::make_conf,
+  $make_conf_remerge      = $portage::params::make_conf_remerge,
   $portage_ensure         = $portage::params::portage_ensure,
   $portage_keywords       = $portage::params::portage_keywords,
   $portage_use            = $portage::params::portage_use,
@@ -57,7 +58,7 @@ class portage (
     ensure => directory;
   }
 
-  exec { 'changed_makeconf_use':
+  exec { 'changed_makeconf':
     command     => 'emerge -1 --changed-use $(qlist -vIC | sed \'s/^/=/\')',
     refreshonly => true,
     timeout     => 43200,
@@ -70,7 +71,10 @@ class portage (
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
-    notify => Exec['changed_makeconf_use'],
+  }
+
+  if ($make_conf_remerge) {
+    Concat[$make_conf] ~> Exec['changed_makeconf']
   }
 
   concat::fragment { 'makeconf_header':

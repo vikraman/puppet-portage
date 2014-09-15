@@ -77,7 +77,7 @@ In order to add entries to `make.conf`:
       ensure  => present,
     }
 
-Changes in the USE variable will also trigger re-emerge of the affected packages.
+Changes in make.conf will also trigger re-emerge of the affected packages. You can disable this behaviour by setting `make_conf_remerge` to `false`.
 
 You can also specify special content:
 
