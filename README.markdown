@@ -151,6 +151,13 @@ The `layman` type/provider can be used to manage overlays via `layman`.
       ensure => present,
     }
 
+Custom overlay list can be used via `overlay_list` parameter.
+
+    layman { 'custom-overlay':
+      ensure => present,
+      overlay_list => 'https://some.xml.file.somethere',
+    }
+
 ## Installation of Gentoo tools
 
 This module can also handle the installation of various Gentoo tools.

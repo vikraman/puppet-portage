@@ -10,4 +10,8 @@ Puppet::Type.newtype(:layman) do
   newparam(:name, :namevar => true) do
     desc "The name of the overlay"
   end
+
+  newparam(:overlay_list) do
+    desc "URL of additional overlay list"
+  end
 end

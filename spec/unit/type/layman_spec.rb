@@ -8,7 +8,7 @@ describe Puppet::Type.type(:layman) do
   end
 
   describe "when validating attributes" do
-    params     = [:name]
+    params     = [:name,:overlay_list]
     properties = [:ensure]
 
     params.each do |param|
