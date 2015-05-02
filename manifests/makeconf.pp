@@ -30,9 +30,10 @@ define portage::makeconf(
 ) {
   include portage
 
-  concat::fragment { $name:
-    ensure  => $ensure,
-    content => template('portage/makeconf.conf.erb'),
-    target  => $portage::make_conf,
+  if($ensure == 'present') {
+    concat::fragment { $name:
+        content => template('portage/makeconf.conf.erb'),
+        target  => $portage::make_conf,
+    }
   }
 }
