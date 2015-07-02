@@ -1,10 +1,9 @@
-require 'facter/util/resolution'
 module Facter::Util::Portage
   module_function
 
   # @return [Hash<Symbol, String>]
   def emerge_info
-    output = Facter::Util::Resolution.exec('emerge --info')
+    output = Facter::Core::Execution.exec('emerge --info')
 
     values = output.scan(/[0-9A-Z_]+=".+?"/)
 
